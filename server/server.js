@@ -2,12 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const { Sequelize } = require('sequelize');
 const config = require('./config/config.json')['development'];
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(express.json()); // Parse JSON bodies for this app
 
 // Database setup
 const sequelize = new Sequelize(config.database, config.username, config.password, {
@@ -28,9 +29,11 @@ db.sequelize.sync()
     console.error('Error connecting to the database', err);
   });
 
-// Define routes
+// Routes
+app.use('/api/auth', authRoutes); // Routes for user authentication
+
 app.get('/', (req, res) => {
-  res.send('Hello, Travel Enthusiasts Platform API!');
+  res.send('Hello, Travel Enthusiasts Platform API!'); // Test route
 });
 
 // Start server
