@@ -22,6 +22,7 @@ router.post('/register', async (req, res) => {
     const user = await User.create({ username, password: hashedPassword });
     res.status(201).json(user); // Send the created user as response
   } catch (err) {
+    console.error('Error during registration:', err); // Log the error
     res.status(500).json({ error: 'Server error' }); // Handle errors
   }
 });
@@ -34,12 +35,14 @@ router.post('/login', async (req, res) => {
     // Find the user by username
     const user = await User.findOne({ where: { username } });
     if (!user) {
+      console.log('User not found for username:', username);
       return res.status(400).json({ error: 'Invalid credentials' }); // User not found
     }
 
     // Compare the provided password with the stored hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.log('Password does not match for username:', username);
       return res.status(400).json({ error: 'Invalid credentials' }); // Password does not match
     }
 
@@ -47,6 +50,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ userId: user.id }, 'your_jwt_secret', { expiresIn: '1h' });
     res.json({ token }); // Send the token as response
   } catch (err) {
+    console.error('Error during login:', err); // Log the error
     res.status(500).json({ error: 'Server error' }); // Handle errors
   }
 });

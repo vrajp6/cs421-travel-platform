@@ -11,6 +11,18 @@ const User = sequelize.define('User', {
   password: {
     type: DataTypes.STRING,
     allowNull: false // Password is required
+  },
+  bio: {
+    type: DataTypes.TEXT,
+    allowNull: true // Bio is optional
+  },
+  profilePicture: {
+    type: DataTypes.STRING,
+    allowNull: true // Profile picture URL is optional
+  },
+  travelHistory: {
+    type: DataTypes.JSON,
+    allowNull: true // Travel history is optional
   }
 });
 

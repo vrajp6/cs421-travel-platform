@@ -3,25 +3,31 @@ const cors = require('cors');
 const { Sequelize } = require('sequelize');
 const config = require('./config/config.json')['development'];
 const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profile');
 
 const app = express();
 
 // Middleware
-app.use(cors()); // Enable Cross-Origin Resource Sharing
-app.use(express.json()); // Parse JSON bodies for this app
+app.use(cors());
+app.use(express.json());
 
 // Database setup
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
   dialect: config.dialect,
+  logging: console.log, // Enable detailed logging
 });
 
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Test database connection and sync models
-db.sequelize.sync()
+// Models
+const User = require('./models/user');
+db.User = User;
+
+// Sync models with the database
+db.sequelize.sync({ alter: true }) // Use { alter: true } to avoid dropping data, and create/modify tables
   .then(() => {
     console.log('Database connected and synced');
   })
@@ -30,13 +36,13 @@ db.sequelize.sync()
   });
 
 // Routes
-app.use('/api/auth', authRoutes); // Routes for user authentication
+app.use('/api/auth', authRoutes);
+app.use('/api/user', profileRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Hello, Travel Enthusiasts Platform API!'); // Test route
+  res.send('Hello, Travel Enthusiasts Platform API!');
 });
 
-// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
