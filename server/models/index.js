@@ -1,14 +1,11 @@
-const { Sequelize } = require('sequelize');
-const config = require('../config/config.json')['development'];
+const Sequelize = require('sequelize');
+const sequelize = require('../config/database');
+const User = require('./user');
 
-// Initialize Sequelize with database configuration
-const sequelize = new Sequelize(config.database, config.username, config.password, {
-  host: config.host,
-  dialect: config.dialect,
-});
+const db = {
+  User: User,
+  sequelize: sequelize,
+  Sequelize: Sequelize
+};
 
-const db = {};
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
-
-module.exports = db; // Export the database connection
+module.exports = db;

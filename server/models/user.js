@@ -1,29 +1,34 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('./index').sequelize;
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-// Define the User model
 const User = sequelize.define('User', {
   username: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true // Username must be unique
+    unique: true
   },
   password: {
     type: DataTypes.STRING,
-    allowNull: false // Password is required
+    allowNull: false
   },
   bio: {
     type: DataTypes.TEXT,
-    allowNull: true // Bio is optional
+    allowNull: true
   },
   profilePicture: {
     type: DataTypes.STRING,
-    allowNull: true // Profile picture URL is optional
+    allowNull: true
   },
   travelHistory: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: true
+  },
+  travelPlans: {
     type: DataTypes.JSON,
-    allowNull: true // Travel history is optional
+    allowNull: true
   }
+}, {
+  timestamps: true
 });
 
-module.exports = User; // Export the User model
+module.exports = User;
