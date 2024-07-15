@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
-      console.log(response.data);
-      // Save token and handle login success
+      localStorage.setItem('token', response.data.token);
+      navigate('/profile'); // Redirect to profile page after login
     } catch (error) {
       console.error('Error logging in:', error);
     }
