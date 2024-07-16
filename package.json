@@ -17,6 +17,7 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
+    "react-modal": "^3.16.1",
     "sequelize": "^6.37.3"
   },
   "devDependencies": {
