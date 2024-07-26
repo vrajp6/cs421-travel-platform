@@ -6,6 +6,7 @@ import './AuthForm.css';
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -22,25 +23,48 @@ const Login = ({ onLogin }) => {
 
   return (
     <div className="auth-container">
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h2>Login</h2>
-        <label>Username:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-        <p>
-          Don't have an account? <Link to="/register">Sign Up</Link>
-        </p>
-      </form>
+      <div className="auth-form-wrapper">
+        <div className="auth-form-left">
+          <h2>Sign In</h2>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>USERNAME</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+              />
+            </div>
+            <div className="form-group">
+              <label>PASSWORD</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+              />
+            </div>
+            <button type="submit" className="submit-btn">Sign In</button>
+            <div className="form-options">
+              <label className="remember-me">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                Remember Me
+              </label>
+              <Link to="/forgot-password" className="forgot-password">Forgot Password</Link>
+            </div>
+          </form>
+        </div>
+        <div className="auth-form-right">
+          <h2>Welcome to TravelTopia</h2>
+          <p>Don't have an account?</p>
+          <Link to="/register" className="signup-btn">Sign Up</Link>
+        </div>
+      </div>
     </div>
   );
 };
