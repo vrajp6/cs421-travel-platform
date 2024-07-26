@@ -5,21 +5,21 @@ import './NavBar.css';
 const NavBar = ({ isLoggedIn, onLogout }) => {
   return (
     <nav className="navbar">
-      <div className="navbar-title">TravelTopia</div>
-      <ul className="navbar-list">
-        {isLoggedIn ? (
-          <>
-            <li><Link to="/profile">Profile</Link></li>
-            <li><Link to="/dashboard">Dashboard</Link></li>
-            <li><button onClick={onLogout}>Logout</button></li>
-          </>
-        ) : (
-          <>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/register">Register</Link></li>
-          </>
-        )}
-      </ul>
+      <div className="navbar-container">
+        <Link to="/" className="navbar-logo">TravelTopia</Link>
+        <ul className="navbar-menu">
+          {isLoggedIn ? (
+            <>
+              <li><Link to="/profile" className="navbar-item">Profile</Link></li>
+              <li><Link to="/dashboard" className="navbar-item">Dashboard</Link></li>
+              <li><button onClick={onLogout} className="navbar-item navbar-button">Logout</button></li>
+            </>
+          ) : (
+            <>
+            </>
+          )}
+        </ul>
+      </div>
     </nav>
   );
 };
