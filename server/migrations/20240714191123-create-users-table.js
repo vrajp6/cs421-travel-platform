@@ -27,7 +27,7 @@ module.exports = {
         allowNull: true
       },
       travelHistory: {
-        type: Sequelize.JSON,
+        type: Sequelize.JSONB,
         allowNull: true
       },
       createdAt: {
