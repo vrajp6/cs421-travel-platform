@@ -154,11 +154,13 @@ const Profile = () => {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              className="input-field"
             />
             <label>Bio:</label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
+              className="input-field"
             />
             <button onClick={handleSaveProfile}>Update Profile</button>
           </div>
