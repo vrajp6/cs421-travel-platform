@@ -20,7 +20,7 @@ const User = sequelize.define('User', {
     allowNull: true
   },
   travelHistory: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
+    type: DataTypes.JSONB,
     allowNull: true
   },
   travelPlans: {

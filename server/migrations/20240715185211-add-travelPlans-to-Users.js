@@ -2,13 +2,19 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.addColumn('Users', 'travelPlans', {
-      type: Sequelize.JSON,
-      allowNull: true,
-    });
+    const table = await queryInterface.describeTable('Users');
+    if (!table.travelPlans) {
+      await queryInterface.addColumn('Users', 'travelPlans', {
+        type: Sequelize.JSON,
+        allowNull: true
+      });
+    }
   },
-
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('Users', 'travelPlans');
+    const table = await queryInterface.describeTable('Users');
+    if (table.travelPlans) {
+      await queryInterface.removeColumn('Users', 'travelPlans');
+    }
   }
 };
+

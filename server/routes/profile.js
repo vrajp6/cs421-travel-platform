@@ -20,22 +20,24 @@ router.get('/profile', authenticate, async (req, res) => {
 // Update user profile
 router.put('/profile', authenticate, async (req, res) => {
   try {
-    const { bio, profilePicture, travelHistory, travelPlans } = req.body;
+    const { username, bio, travelHistory } = req.body;
+    console.log('Request Body:', req.body); // Log request body for debugging
     const user = await User.findOne({ where: { id: req.userId } });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    user.bio = bio || user.bio;
-    user.profilePicture = profilePicture || user.profilePicture;
-    user.travelHistory = travelHistory || user.travelHistory;
-    user.travelPlans = travelPlans || user.travelPlans;
+    user.username = username !== undefined ? username : user.username;
+    user.bio = bio !== undefined ? bio : user.bio;
+    user.travelHistory = travelHistory !== undefined ? travelHistory : user.travelHistory;
     await user.save();
-    res.json(user);
+    console.log('Updated User:', user); // Log updated user for debugging
+    res.json(user); // Ensure to send back the updated user object
   } catch (error) {
-    console.error('Error updating profile:', error);
+    console.error('Error updating profile:', error); // Log error details
     res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 // Add new travel plan
 router.post('/travelPlans', authenticate, async (req, res) => {
