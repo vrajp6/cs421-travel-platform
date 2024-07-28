@@ -42,7 +42,7 @@ router.get('/search', async (req, res) => {
     const users = await User.findAll({
       where: {
         [Op.or]: [
-          { username: { [Op.like]: `%${query}%` } },
+          { username: { [Op.iLike]: `%${query}%` } },
           { travelHistory: { [Op.contains]: [query] } }
         ]
       }
