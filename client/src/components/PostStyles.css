@@ -1,0 +1,156 @@
+/* Overall PostFeed styles */
+.post-feed {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* CreatePost styles */
+  .create-post {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .create-post h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .create-post form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .create-post textarea,
+  .create-post input[type="text"] {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .create-post textarea {
+    height: 100px;
+    resize: vertical;
+  }
+  
+  .create-post button {
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .create-post button:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Individual Post styles */
+  .post {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+  }
+  
+  .post-info h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .location {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #777;
+  }
+  
+  .post-content {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .post-image {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  
+  .post-date {
+    font-size: 14px;
+    color: #777;
+    margin: 0;
+  }
+  
+  .delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .delete-button:hover {
+    background-color: #ff3333;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .post-feed {
+      padding: 10px;
+    }
+  
+    .create-post,
+    .post {
+      padding: 15px;
+    }
+  
+    .avatar {
+      width: 40px;
+      height: 40px;
+    }
+  
+    .post-info h3 {
+      font-size: 14px;
+    }
+  
+    .location,
+    .post-content,
+    .post-date {
+      font-size: 12px;
+    }
+  }
