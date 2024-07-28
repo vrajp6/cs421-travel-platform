@@ -104,8 +104,9 @@ const Profile = () => {
   const handleSaveProfile = () => {
     const updatedUser = {
       ...user,
-      username: username,
-      bio: bio
+      username: username || user.username,
+      bio: bio || user.bio,
+      travelHistory: user.travelHistory
     };
     handleProfileUpdate(updatedUser);
   };
@@ -168,7 +169,7 @@ const Profile = () => {
             <span className="icon">👤</span> Travel History
           </h2>
           <div className="travel-history">
-            {user.travelHistory.map((place, index) => (
+            {user.travelHistory?.map((place, index) => (
               <span key={index} className="travel-tag">
                 {place} <button onClick={() => handleRemoveTravelHistory(index)}>✖</button>
               </span>
@@ -185,7 +186,7 @@ const Profile = () => {
             <span className="icon">📍</span> Travel Plans
           </h2>
           <div className="travel-plans">
-            {user.travelPlans.map((plan, index) => (
+            {user.travelPlans?.map((plan, index) => (
               <div key={index} className="travel-plan">
                 <div>
                   <h3>{plan.destination}</h3>
