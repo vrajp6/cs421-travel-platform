@@ -7,6 +7,8 @@ import Dashboard from './components/Dashboard';
 import NavBar from './components/NavBar';
 import PrivateRoute from './components/PrivateRoute';
 import './components/styles.css';
+import Search from './components/Search'
+import SearchProfile from './components/SearchProfile';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,6 +31,8 @@ const App = () => {
           <Route path="/register" element={<Register onRegister={handleLogin} />} />
           <Route path="/profile" element={<PrivateRoute isLoggedIn={isLoggedIn}><Profile /></PrivateRoute>} />
           <Route path="/dashboard" element={<PrivateRoute isLoggedIn={isLoggedIn}><Dashboard /></PrivateRoute>} />
+          <Route path="/search" element={<PrivateRoute isLoggedIn={isLoggedIn}><Search /></PrivateRoute>} />
+          <Route path="/profile/:username" element={<PrivateRoute isLoggedIn={isLoggedIn}><SearchProfile /></PrivateRoute>} />
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
