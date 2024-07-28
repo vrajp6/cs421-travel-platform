@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../models');
 const authenticate = require('../middleware/authenticate');
+const { Sequelize, Op } = require('sequelize')
 
 // Fetch user profile
 router.get('/profile', authenticate, async (req, res) => {
