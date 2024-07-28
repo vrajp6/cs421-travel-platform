@@ -38,7 +38,6 @@ router.put('/profile', authenticate, async (req, res) => {
   }
 });
 
-
 // Add new travel plan
 router.post('/travelPlans', authenticate, async (req, res) => {
   try {
