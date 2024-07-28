@@ -17,6 +17,49 @@ router.get('/profile', authenticate, async (req, res) => {
   }
 });
 
+router.get('/profile/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ where: { username: req.params.username } });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Search users by username or travel history
+router.get('/search', async (req, res) => {
+  const { query } = req.query;
+  console.log('Received search query:', query); // Log the search query
+  if (!query) {
+    return res.status(400).json({ error: 'Query parameter is required' });
+  }
+
+  try {
+    const users = await User.findAll({
+      where: {
+        [Op.or]: [
+          { username: { [Op.like]: `%${query}%` } },
+          { travelHistory: { [Op.contains]: [query] } }
+        ]
+      }
+    });
+
+    console.log('Search results:', users); // Log the search results
+
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'No users found' });
+    }
+
+    res.json(users);
+  } catch (error) {
+    console.error('Error searching profiles:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Update user profile
 router.put('/profile', authenticate, async (req, res) => {
   try {
