@@ -11,7 +11,12 @@ const Profile = () => {
     travelPlans: []
   });
   const [newTravelPlan, setNewTravelPlan] = useState({ destination: '', date: '', details: '' });
-  const [showAlert, setShowAlert] = useState(false);
+  const [newTravelHistory, setNewTravelHistory] = useState('');
+  const [showAlert, setShowAlert] = useState({ type: '', message: '' });
+
+  // Separate state for username and bio for better handling
+  const [username, setUsername] = useState('');
+  const [bio, setBio] = useState('');
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -28,6 +33,8 @@ const Profile = () => {
           travelHistory: response.data.travelHistory || [],
           travelPlans: response.data.travelPlans || []
         });
+        setUsername(response.data.username);
+        setBio(response.data.bio || '');
       } catch (error) {
         console.error('Error fetching profile:', error);
       }
@@ -48,8 +55,8 @@ const Profile = () => {
           travelPlans: response.data.travelPlans
         }));
         setNewTravelPlan({ destination: '', date: '', details: '' });
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000);
+        setShowAlert({ type: 'success', message: 'Travel plan added successfully!' });
+        setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
       } catch (error) {
         console.error('Error adding travel plan:', error);
       }
@@ -72,6 +79,67 @@ const Profile = () => {
     }
   };
 
+  const handleProfileUpdate = async (updatedUser) => {
+    try {
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const profileData = {
+        username: updatedUser.username,
+        bio: updatedUser.bio,
+        travelHistory: updatedUser.travelHistory
+      };
+      console.log('Updating profile with:', profileData);
+      const response = await axios.put('http://localhost:5000/api/user/profile', profileData, config);
+      console.log('Profile updated:', response.data);
+      setUser(response.data);
+      setShowAlert({ type: 'success', message: 'Your profile has been updated.' });
+      setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        // Handle username conflict error
+        setShowAlert({ type: 'error', message: 'Username already exists.' });
+      } else {
+        console.error('Error updating profile:', error);
+      }
+      setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
+    }
+  };
+
+  const handleSaveProfile = () => {
+    const updatedUser = {
+      ...user,
+      username: username || user.username,
+      bio: bio || user.bio,
+      travelHistory: user.travelHistory
+    };
+    handleProfileUpdate(updatedUser);
+  };
+
+  const handleAddTravelHistory = () => {
+    if (newTravelHistory) {
+      console.log('Adding travel history:', newTravelHistory);
+      const updatedUser = {
+        ...user,
+        travelHistory: [...user.travelHistory, newTravelHistory]
+      };
+      handleProfileUpdate(updatedUser);
+      setNewTravelHistory('');
+    }
+  };
+
+  const handleRemoveTravelHistory = (index) => {
+    setUser(prevUser => {
+      const updatedUser = {
+        ...prevUser,
+        travelHistory: prevUser.travelHistory.filter((_, i) => i !== index)
+      };
+      handleProfileUpdate(updatedUser);
+      return updatedUser;
+    });
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
@@ -85,21 +153,46 @@ const Profile = () => {
         
         <div className="profile-content">
           <h2>
+            <span className="icon">👤</span> Edit Profile
+          </h2>
+          <div className="profile-edit-form">
+            <label>Username:</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="input-field"
+            />
+            <label>Bio:</label>
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              className="input-field"
+            />
+            <button onClick={handleSaveProfile}>Update Profile</button>
+          </div>
+          <h2>
             <span className="icon">👤</span> Travel History
           </h2>
           <div className="travel-history">
-            {user.travelHistory.map((place, index) => (
+            {user.travelHistory?.map((place, index) => (
               <span key={index} className="travel-tag">
-                {place}
+                {place} <button onClick={() => handleRemoveTravelHistory(index)}>✖</button>
               </span>
             ))}
+            <input
+              type="text"
+              placeholder="Add a place"
+              value={newTravelHistory}
+              onChange={(e) => setNewTravelHistory(e.target.value)}
+            />
+            <button onClick={handleAddTravelHistory}>Add</button>
           </div>
-
           <h2>
             <span className="icon">📍</span> Travel Plans
           </h2>
           <div className="travel-plans">
-            {user.travelPlans.map((plan, index) => (
+            {user.travelPlans?.map((plan, index) => (
               <div key={index} className="travel-plan">
                 <div>
                   <h3>{plan.destination}</h3>
@@ -114,7 +207,6 @@ const Profile = () => {
               </div>
             ))}
           </div>
-
           <div className="add-travel-plan">
             <h3>
               <span className="icon">➕</span> Add New Travel Plan
@@ -146,10 +238,10 @@ const Profile = () => {
         </div>
       </div>
 
-      {showAlert && (
-        <div className="alert">
-          <h4>Success!</h4>
-          <p>Your travel plan has been added.</p>
+      {showAlert.message && (
+        <div className={`alert ${showAlert.type === 'error' ? 'alert-error' : 'alert-success'}`}>
+          <h4>{showAlert.type === 'error' ? 'Error' : 'Success'}!</h4>
+          <p>{showAlert.message}</p>
         </div>
       )}
     </div>
