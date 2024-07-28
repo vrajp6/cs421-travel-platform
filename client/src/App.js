@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import NavBar from './components/NavBar';
 import PrivateRoute from './components/PrivateRoute';
 import './components/styles.css';
+import PostFeed from './components/PostFeed';
 import Search from './components/Search'
 import SearchProfile from './components/SearchProfile';
 
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/register" element={<Register onRegister={handleLogin} />} />
           <Route path="/profile" element={<PrivateRoute isLoggedIn={isLoggedIn}><Profile /></PrivateRoute>} />
           <Route path="/dashboard" element={<PrivateRoute isLoggedIn={isLoggedIn}><Dashboard /></PrivateRoute>} />
+          <Route path="/feed" element={<PrivateRoute isLoggedIn={isLoggedIn}><PostFeed /></PrivateRoute>} />  
           <Route path="/search" element={<PrivateRoute isLoggedIn={isLoggedIn}><Search /></PrivateRoute>} />
           <Route path="/profile/:username" element={<PrivateRoute isLoggedIn={isLoggedIn}><SearchProfile /></PrivateRoute>} />
           <Route path="/" element={<Navigate to="/login" />} />
