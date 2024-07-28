@@ -12,7 +12,7 @@ const Profile = () => {
   });
   const [newTravelPlan, setNewTravelPlan] = useState({ destination: '', date: '', details: '' });
   const [newTravelHistory, setNewTravelHistory] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ type: '', message: '' });
 
   // Separate state for username and bio for better handling
   const [username, setUsername] = useState('');
@@ -55,8 +55,8 @@ const Profile = () => {
           travelPlans: response.data.travelPlans
         }));
         setNewTravelPlan({ destination: '', date: '', details: '' });
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000);
+        setShowAlert({ type: 'success', message: 'Travel plan added successfully!' });
+        setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
       } catch (error) {
         console.error('Error adding travel plan:', error);
       }
@@ -94,10 +94,16 @@ const Profile = () => {
       const response = await axios.put('http://localhost:5000/api/user/profile', profileData, config);
       console.log('Profile updated:', response.data);
       setUser(response.data);
-      setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 3000);
+      setShowAlert({ type: 'success', message: 'Your profile has been updated.' });
+      setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
     } catch (error) {
-      console.error('Error updating profile:', error);
+      if (error.response && error.response.status === 500) {
+        // Handle username conflict error
+        setShowAlert({ type: 'error', message: 'Username already exists.' });
+      } else {
+        console.error('Error updating profile:', error);
+      }
+      setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
     }
   };
 
@@ -232,10 +238,10 @@ const Profile = () => {
         </div>
       </div>
 
-      {showAlert && (
-        <div className="alert">
-          <h4>Success!</h4>
-          <p>Your profile has been updated.</p>
+      {showAlert.message && (
+        <div className={`alert ${showAlert.type === 'error' ? 'alert-error' : 'alert-success'}`}>
+          <h4>{showAlert.type === 'error' ? 'Error' : 'Success'}!</h4>
+          <p>{showAlert.message}</p>
         </div>
       )}
     </div>
