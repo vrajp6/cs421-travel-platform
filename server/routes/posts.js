@@ -100,4 +100,23 @@ router.delete('/:id', authenticate, async (req, res) => {
   }
 });
 
+// Get posts for a specific user
+router.get('/user/:userId', async (req, res) => {
+  try {
+    const posts = await Post.findAll({
+      where: { userId: req.params.userId },
+      include: [{ 
+        model: User, 
+        attributes: ['id', 'username', 'profilePicture'],
+        required: false
+      }],
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(posts);
+  } catch (error) {
+    console.error('Error fetching user posts:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

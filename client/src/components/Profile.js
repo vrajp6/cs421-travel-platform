@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import UserPosts from './UserPosts';
 import './ProfileStyles.css';
 
 const Profile = () => {
@@ -14,7 +15,6 @@ const Profile = () => {
   const [newTravelHistory, setNewTravelHistory] = useState('');
   const [showAlert, setShowAlert] = useState({ type: '', message: '' });
 
-  // Separate state for username and bio for better handling
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
 
@@ -27,6 +27,7 @@ const Profile = () => {
         };
         const response = await axios.get('http://localhost:5000/api/user/profile', config);
         setUser({
+          id: response.data.id,
           username: response.data.username,
           bio: response.data.bio || '',
           profilePicture: response.data.profilePicture || '/api/placeholder/150/150',
@@ -98,7 +99,6 @@ const Profile = () => {
       setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
     } catch (error) {
       if (error.response && error.response.status === 500) {
-        // Handle username conflict error
         setShowAlert({ type: 'error', message: 'Username already exists.' });
       } else {
         console.error('Error updating profile:', error);
@@ -244,6 +244,8 @@ const Profile = () => {
           <p>{showAlert.message}</p>
         </div>
       )}
+
+      <UserPosts userId={user.id} currentUserId={user.id} />
     </div>
   );
 };

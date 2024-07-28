@@ -33,7 +33,7 @@ router.get('/profile/:username', async (req, res) => {
 // Search users by username or travel history
 router.get('/search', async (req, res) => {
   const { query } = req.query;
-  console.log('Received search query:', query); // Log the search query
+  console.log('Received search query:', query);
   if (!query) {
     return res.status(400).json({ error: 'Query parameter is required' });
   }
@@ -48,7 +48,7 @@ router.get('/search', async (req, res) => {
       }
     });
 
-    console.log('Search results:', users); // Log the search results
+    console.log('Search results:', users);
 
     if (users.length === 0) {
       return res.status(404).json({ error: 'No users found' });
@@ -65,7 +65,7 @@ router.get('/search', async (req, res) => {
 router.put('/profile', authenticate, async (req, res) => {
   try {
     const { username, bio, travelHistory } = req.body;
-    console.log('Request Body:', req.body); // Log request body for debugging
+    console.log('Request Body:', req.body);
     const user = await User.findOne({ where: { id: req.userId } });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -74,10 +74,10 @@ router.put('/profile', authenticate, async (req, res) => {
     user.bio = bio !== undefined ? bio : user.bio;
     user.travelHistory = travelHistory !== undefined ? travelHistory : user.travelHistory;
     await user.save();
-    console.log('Updated User:', user); // Log updated user for debugging
-    res.json(user); // Ensure to send back the updated user object
+    console.log('Updated User:', user);
+    res.json(user);
   } catch (error) {
-    console.error('Error updating profile:', error); // Log error details
+    console.error('Error updating profile:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });

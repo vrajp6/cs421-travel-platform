@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import UserPosts from './UserPosts';
 import './ProfileStyles.css';
 
 const SearchProfile = () => {
   const { username } = useParams();
   const [user, setUser] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +21,21 @@ const SearchProfile = () => {
         setLoading(false);
       }
     };
+
+    const fetchCurrentUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:5000/api/user/profile', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setCurrentUserId(response.data.id);
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+    };
+
     fetchProfile();
+    fetchCurrentUser();
   }, [username]);
 
   if (loading) {
@@ -71,6 +87,8 @@ const SearchProfile = () => {
           </div>
         </div>
       </div>
+
+      <UserPosts userId={user.id} currentUserId={currentUserId} />
     </div>
   );
 };
