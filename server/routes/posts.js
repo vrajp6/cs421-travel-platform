@@ -119,4 +119,38 @@ router.get('/user/:userId', async (req, res) => {
   }
 });
 
+// Like a post
+router.post('/:id/like', authenticate, async (req, res) => {
+  try {
+    const post = await Post.findByPk(req.params.id);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    post.likes += 1;
+    await post.save();
+    res.json({ likes: post.likes });
+  } catch (error) {
+    console.error('Error liking post:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Unlike a post
+router.post('/:id/unlike', authenticate, async (req, res) => {
+  try {
+    const post = await Post.findByPk(req.params.id);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    if (post.likes > 0) {
+      post.likes -= 1;
+      await post.save();
+    }
+    res.json({ likes: post.likes });
+  } catch (error) {
+    console.error('Error unliking post:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

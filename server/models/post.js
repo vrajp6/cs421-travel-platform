@@ -14,13 +14,17 @@ const Post = sequelize.define('Post', {
   imageUrl: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  likes: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    allowNull: false
   }
 }, {
   timestamps: true
 });
 
-// Establish the relationship between User and Post
-Post.belongsTo(User, { foreignKey: 'userId' }); // Changed from 'id' to 'userId'
-User.hasMany(Post, { foreignKey: 'userId' }); // Changed from 'id' to 'userId'
+Post.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Post, { foreignKey: 'userId' });
 
 module.exports = Post;

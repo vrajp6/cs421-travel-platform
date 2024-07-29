@@ -1,5 +1,5 @@
 /* Overall PostFeed styles */
-.post-feed {
+  .post-feed {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
@@ -127,7 +127,47 @@
   .delete-button:hover {
     background-color: #ff3333;
   }
+
+  .like-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f0f0f0;
+    border: none;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+
+  .like-button:hover {
+    background-color: #e0e0e0;
+  }
+
+  .like-button.liked {
+    background-color: #1877f2;
+    color: white;
+  }
+
+  .like-button svg {
+    transition: transform 0.3s ease;
+  }
+
+  .like-button:hover svg {
+    transform: scale(1.1);
+  }
   
+  .like-count {
+    font-size: 12px;
+    color: #65676B;
+  }
+  
+  .like-button.liked .like-count {
+    color: white;
+  }
+
   /* Responsive design */
   @media (max-width: 768px) {
     .post-feed {
