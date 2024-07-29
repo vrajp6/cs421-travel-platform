@@ -19,7 +19,8 @@
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
     "react-modal": "^3.16.1",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "sharp": "^0.33.4"
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.2"

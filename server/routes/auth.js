@@ -18,8 +18,12 @@ router.post('/register', async (req, res) => {
 
     // Hash the user's password
     const hashedPassword = await bcrypt.hash(password, 10);
-    // Create a new user in the database
-    const user = await User.create({ username, password: hashedPassword });
+    // Create a new user in the database with the default profile picture
+    const user = await User.create({
+      username,
+      password: hashedPassword,
+      profilePicture: '/uploads/default-profile-picture.png' // Set the default profile picture
+    });
     res.status(201).json(user); // Send the created user as response
   } catch (err) {
     console.error('Error during registration:', err); // Log the error

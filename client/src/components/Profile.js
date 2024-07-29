@@ -32,7 +32,7 @@ const Profile = () => {
           id: response.data.id,
           username: response.data.username,
           bio: response.data.bio || '',
-          profilePicture: response.data.profilePicture || '/api/placeholder/150/150',
+          profilePicture: response.data.profilePicture || '/uploads/default-profile-picture.png',
           travelHistory: Array.isArray(response.data.travelHistory) ? response.data.travelHistory : [],
           travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
         });
@@ -93,7 +93,8 @@ const Profile = () => {
       const profileData = {
         username: updatedUser.username,
         bio: updatedUser.bio,
-        travelHistory: updatedUser.travelHistory
+        travelHistory: updatedUser.travelHistory,
+        profilePicture: updatedUser.profilePicture // Ensure profile picture is included
       };
       console.log('Updating profile with:', profileData);
       const response = await axios.put('http://localhost:5000/api/user/profile', profileData, config);
@@ -109,11 +110,13 @@ const Profile = () => {
       setTimeout(() => setShowAlert(false), 3000);
     } catch (error) {
       if (error.response && error.response.status === 500) {
-        setShowAlert({ type: 'error', message: 'Username already exists.' });
+        setShowAlert(true);
+        setAlertType('error');
+        setAlertMessage('Username already exists.');
       } else {
         console.error('Error updating profile:', error);
       }
-      setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
+      setTimeout(() => setShowAlert(false), 3000);
     }
   };
 
@@ -122,7 +125,8 @@ const Profile = () => {
       ...user,
       username: username || user.username,
       bio: bio || user.bio,
-      travelHistory: user.travelHistory
+      travelHistory: user.travelHistory,
+      profilePicture: user.profilePicture // Ensure profile picture is included
     };
     handleProfileUpdate(updatedUser);
   };
@@ -150,10 +154,26 @@ const Profile = () => {
     });
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setUser({ ...user, profilePicture: URL.createObjectURL(file) });
+      const formData = new FormData();
+      formData.append('profilePicture', file);
+
+      try {
+        const token = localStorage.getItem('token');
+        const config = {
+          headers: { Authorization: `Bearer ${token}` },
+        };
+        const response = await axios.post('http://localhost:5000/api/user/uploadProfilePicture', formData, config);
+        const updatedUser = {
+          ...user,
+          profilePicture: response.data.profilePicture
+        };
+        handleProfileUpdate(updatedUser);
+      } catch (error) {
+        console.error('Error uploading profile picture:', error);
+      }
     }
   };
 
@@ -161,33 +181,38 @@ const Profile = () => {
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-header">
-          <img src={user.profilePicture} alt="Profile" className="profile-picture" />
-          <input type="file" onChange={handleFileChange} style={{ display: 'none' }} id="file-input" />
-          <button onClick={() => document.getElementById('file-input').click()}>Change Profile Picture</button>
+          <img src={`http://localhost:5000${user.profilePicture}`} alt="Profile" className="profile-picture" />
           <div className="profile-info">
             <h1>{user.username}</h1>
             <p>{user.bio}</p>
           </div>
         </div>
-        
+        <div className="profile-actions">
+          <button onClick={() => document.getElementById('file-input').click()} className="profile-action-button">Change Profile Picture</button>
+          <input type="file" onChange={handleFileChange} style={{ display: 'none' }} id="file-input" />
+        </div>
         <div className="profile-content">
           <h2>
             <span className="icon">👤</span> Edit Profile
           </h2>
           <div className="profile-edit-form">
-            <label>Username:</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="input-field"
-            />
-            <label>Bio:</label>
-            <textarea
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              className="input-field"
-            />
+            <div>
+              <label>Username:</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="input-field"
+              />
+            </div>
+            <div>
+              <label>Bio:</label>
+              <textarea
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                className="input-field"
+              />
+            </div>
             <button onClick={handleSaveProfile}>Update Profile</button>
           </div>
           <h2>
@@ -258,7 +283,7 @@ const Profile = () => {
       </div>
 
       {showAlert && (
-        <div className={`alert ${alertType}`}>
+        <div className={`alert ${alertType === 'error' ? 'alert-error' : 'alert-success'}`}>
           <h4>{alertType === 'success' ? 'Success!' : 'Error!'}</h4>
           <p>{alertMessage}</p>
         </div>

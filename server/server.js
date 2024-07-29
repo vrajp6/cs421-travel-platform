@@ -5,12 +5,16 @@ const config = require('./config/config.json')['development'];
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 const postRoutes = require('./routes/posts');
+const path = require('path');
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the "uploads" directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Database setup
 const sequelize = new Sequelize(config.database, config.username, config.password, {
