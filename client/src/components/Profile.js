@@ -12,7 +12,9 @@ const Profile = () => {
   });
   const [newTravelPlan, setNewTravelPlan] = useState({ destination: '', date: '', details: '' });
   const [newTravelHistory, setNewTravelHistory] = useState('');
-  const [showAlert, setShowAlert] = useState({ type: '', message: '' });
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
 
   // Separate state for username and bio for better handling
   const [username, setUsername] = useState('');
@@ -30,8 +32,8 @@ const Profile = () => {
           username: response.data.username,
           bio: response.data.bio || '',
           profilePicture: response.data.profilePicture || '/api/placeholder/150/150',
-          travelHistory: response.data.travelHistory || [],
-          travelPlans: response.data.travelPlans || []
+          travelHistory: Array.isArray(response.data.travelHistory) ? response.data.travelHistory : [],
+          travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
         });
         setUsername(response.data.username);
         setBio(response.data.bio || '');
@@ -52,11 +54,13 @@ const Profile = () => {
         const response = await axios.post('http://localhost:5000/api/user/travelPlans', newTravelPlan, config);
         setUser(prevUser => ({
           ...prevUser,
-          travelPlans: response.data.travelPlans
+          travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
         }));
         setNewTravelPlan({ destination: '', date: '', details: '' });
-        setShowAlert({ type: 'success', message: 'Travel plan added successfully!' });
-        setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
+        setShowAlert(true);
+        setAlertType('success');
+        setAlertMessage('Travel plan added successfully!');
+        setTimeout(() => setShowAlert(false), 3000);
       } catch (error) {
         console.error('Error adding travel plan:', error);
       }
@@ -72,7 +76,7 @@ const Profile = () => {
       const response = await axios.delete(`http://localhost:5000/api/user/travelPlans/${index}`, config);
       setUser(prevUser => ({
         ...prevUser,
-        travelPlans: response.data.travelPlans
+        travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
       }));
     } catch (error) {
       console.error('Error removing travel plan:', error);
@@ -93,17 +97,21 @@ const Profile = () => {
       console.log('Updating profile with:', profileData);
       const response = await axios.put('http://localhost:5000/api/user/profile', profileData, config);
       console.log('Profile updated:', response.data);
-      setUser(response.data);
-      setShowAlert({ type: 'success', message: 'Your profile has been updated.' });
-      setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
+      setUser({
+        ...response.data,
+        travelHistory: Array.isArray(response.data.travelHistory) ? response.data.travelHistory : [],
+        travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
+      });
+      setShowAlert(true);
+      setAlertType('success');
+      setAlertMessage('Profile updated successfully!');
+      setTimeout(() => setShowAlert(false), 3000);
     } catch (error) {
-      if (error.response && error.response.status === 500) {
-        // Handle username conflict error
-        setShowAlert({ type: 'error', message: 'Username already exists.' });
-      } else {
-        console.error('Error updating profile:', error);
-      }
-      setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
+      console.error('Error updating profile:', error);
+      setShowAlert(true);
+      setAlertType('error');
+      setAlertMessage('Failed to update profile!');
+      setTimeout(() => setShowAlert(false), 3000);
     }
   };
 
@@ -140,11 +148,20 @@ const Profile = () => {
     });
   };
 
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setUser({ ...user, profilePicture: URL.createObjectURL(file) });
+    }
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-header">
           <img src={user.profilePicture} alt="Profile" className="profile-picture" />
+          <input type="file" onChange={handleFileChange} style={{ display: 'none' }} id="file-input" />
+          <button onClick={() => document.getElementById('file-input').click()}>Change Profile Picture</button>
           <div className="profile-info">
             <h1>{user.username}</h1>
             <p>{user.bio}</p>
@@ -175,7 +192,7 @@ const Profile = () => {
             <span className="icon">👤</span> Travel History
           </h2>
           <div className="travel-history">
-            {user.travelHistory?.map((place, index) => (
+            {user.travelHistory.map((place, index) => (
               <span key={index} className="travel-tag">
                 {place} <button onClick={() => handleRemoveTravelHistory(index)}>✖</button>
               </span>
@@ -192,7 +209,7 @@ const Profile = () => {
             <span className="icon">📍</span> Travel Plans
           </h2>
           <div className="travel-plans">
-            {user.travelPlans?.map((plan, index) => (
+            {user.travelPlans.map((plan, index) => (
               <div key={index} className="travel-plan">
                 <div>
                   <h3>{plan.destination}</h3>
@@ -238,10 +255,10 @@ const Profile = () => {
         </div>
       </div>
 
-      {showAlert.message && (
-        <div className={`alert ${showAlert.type === 'error' ? 'alert-error' : 'alert-success'}`}>
-          <h4>{showAlert.type === 'error' ? 'Error' : 'Success'}!</h4>
-          <p>{showAlert.message}</p>
+      {showAlert && (
+        <div className={`alert ${alertType}`}>
+          <h4>{alertType === 'success' ? 'Success!' : 'Error!'}</h4>
+          <p>{alertMessage}</p>
         </div>
       )}
     </div>
