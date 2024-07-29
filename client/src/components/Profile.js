@@ -13,7 +13,9 @@ const Profile = () => {
   });
   const [newTravelPlan, setNewTravelPlan] = useState({ destination: '', date: '', details: '' });
   const [newTravelHistory, setNewTravelHistory] = useState('');
-  const [showAlert, setShowAlert] = useState({ type: '', message: '' });
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
 
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
@@ -30,9 +32,9 @@ const Profile = () => {
           id: response.data.id,
           username: response.data.username,
           bio: response.data.bio || '',
-          profilePicture: response.data.profilePicture || '/api/placeholder/150/150',
-          travelHistory: response.data.travelHistory || [],
-          travelPlans: response.data.travelPlans || []
+          profilePicture: response.data.profilePicture || '/uploads/default-profile-picture.png',
+          travelHistory: Array.isArray(response.data.travelHistory) ? response.data.travelHistory : [],
+          travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
         });
         setUsername(response.data.username);
         setBio(response.data.bio || '');
@@ -53,11 +55,13 @@ const Profile = () => {
         const response = await axios.post('http://localhost:5000/api/user/travelPlans', newTravelPlan, config);
         setUser(prevUser => ({
           ...prevUser,
-          travelPlans: response.data.travelPlans
+          travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
         }));
         setNewTravelPlan({ destination: '', date: '', details: '' });
-        setShowAlert({ type: 'success', message: 'Travel plan added successfully!' });
-        setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
+        setShowAlert(true);
+        setAlertType('success');
+        setAlertMessage('Travel plan added successfully!');
+        setTimeout(() => setShowAlert(false), 3000);
       } catch (error) {
         console.error('Error adding travel plan:', error);
       }
@@ -73,7 +77,7 @@ const Profile = () => {
       const response = await axios.delete(`http://localhost:5000/api/user/travelPlans/${index}`, config);
       setUser(prevUser => ({
         ...prevUser,
-        travelPlans: response.data.travelPlans
+        travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
       }));
     } catch (error) {
       console.error('Error removing travel plan:', error);
@@ -89,21 +93,30 @@ const Profile = () => {
       const profileData = {
         username: updatedUser.username,
         bio: updatedUser.bio,
-        travelHistory: updatedUser.travelHistory
+        travelHistory: updatedUser.travelHistory,
+        profilePicture: updatedUser.profilePicture // Ensure profile picture is included
       };
       console.log('Updating profile with:', profileData);
       const response = await axios.put('http://localhost:5000/api/user/profile', profileData, config);
       console.log('Profile updated:', response.data);
-      setUser(response.data);
-      setShowAlert({ type: 'success', message: 'Your profile has been updated.' });
-      setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
+      setUser({
+        ...response.data,
+        travelHistory: Array.isArray(response.data.travelHistory) ? response.data.travelHistory : [],
+        travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
+      });
+      setShowAlert(true);
+      setAlertType('success');
+      setAlertMessage('Profile updated successfully!');
+      setTimeout(() => setShowAlert(false), 3000);
     } catch (error) {
       if (error.response && error.response.status === 500) {
-        setShowAlert({ type: 'error', message: 'Username already exists.' });
+        setShowAlert(true);
+        setAlertType('error');
+        setAlertMessage('Username already exists.');
       } else {
         console.error('Error updating profile:', error);
       }
-      setTimeout(() => setShowAlert({ type: '', message: '' }), 3000);
+      setTimeout(() => setShowAlert(false), 3000);
     }
   };
 
@@ -112,7 +125,8 @@ const Profile = () => {
       ...user,
       username: username || user.username,
       bio: bio || user.bio,
-      travelHistory: user.travelHistory
+      travelHistory: user.travelHistory,
+      profilePicture: user.profilePicture // Ensure profile picture is included
     };
     handleProfileUpdate(updatedUser);
   };
@@ -140,42 +154,72 @@ const Profile = () => {
     });
   };
 
+  const handleFileChange = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const formData = new FormData();
+      formData.append('profilePicture', file);
+
+      try {
+        const token = localStorage.getItem('token');
+        const config = {
+          headers: { Authorization: `Bearer ${token}` },
+        };
+        const response = await axios.post('http://localhost:5000/api/user/uploadProfilePicture', formData, config);
+        const updatedUser = {
+          ...user,
+          profilePicture: response.data.profilePicture
+        };
+        handleProfileUpdate(updatedUser);
+      } catch (error) {
+        console.error('Error uploading profile picture:', error);
+      }
+    }
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-header">
-          <img src={user.profilePicture} alt="Profile" className="profile-picture" />
+          <img src={`http://localhost:5000${user.profilePicture}`} alt="Profile" className="profile-picture" />
           <div className="profile-info">
             <h1>{user.username}</h1>
             <p>{user.bio}</p>
           </div>
         </div>
-        
+        <div className="profile-actions">
+          <button onClick={() => document.getElementById('file-input').click()} className="profile-action-button">Change Profile Picture</button>
+          <input type="file" onChange={handleFileChange} style={{ display: 'none' }} id="file-input" />
+        </div>
         <div className="profile-content">
           <h2>
             <span className="icon">👤</span> Edit Profile
           </h2>
           <div className="profile-edit-form">
-            <label>Username:</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="input-field"
-            />
-            <label>Bio:</label>
-            <textarea
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              className="input-field"
-            />
+            <div>
+              <label>Username:</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="input-field"
+              />
+            </div>
+            <div>
+              <label>Bio:</label>
+              <textarea
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                className="input-field"
+              />
+            </div>
             <button onClick={handleSaveProfile}>Update Profile</button>
           </div>
           <h2>
             <span className="icon">👤</span> Travel History
           </h2>
           <div className="travel-history">
-            {user.travelHistory?.map((place, index) => (
+            {user.travelHistory.map((place, index) => (
               <span key={index} className="travel-tag">
                 {place} <button onClick={() => handleRemoveTravelHistory(index)}>✖</button>
               </span>
@@ -192,7 +236,7 @@ const Profile = () => {
             <span className="icon">📍</span> Travel Plans
           </h2>
           <div className="travel-plans">
-            {user.travelPlans?.map((plan, index) => (
+            {user.travelPlans.map((plan, index) => (
               <div key={index} className="travel-plan">
                 <div>
                   <h3>{plan.destination}</h3>
@@ -238,10 +282,10 @@ const Profile = () => {
         </div>
       </div>
 
-      {showAlert.message && (
-        <div className={`alert ${showAlert.type === 'error' ? 'alert-error' : 'alert-success'}`}>
-          <h4>{showAlert.type === 'error' ? 'Error' : 'Success'}!</h4>
-          <p>{showAlert.message}</p>
+      {showAlert && (
+        <div className={`alert ${alertType === 'error' ? 'alert-error' : 'alert-success'}`}>
+          <h4>{alertType === 'success' ? 'Success!' : 'Error!'}</h4>
+          <p>{alertMessage}</p>
         </div>
       )}
 

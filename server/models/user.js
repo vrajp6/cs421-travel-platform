@@ -17,7 +17,7 @@ const User = sequelize.define('User', {
   },
   profilePicture: {
     type: DataTypes.STRING,
-    allowNull: true
+    defaultValue: '/uploads/default-profile-picture.jpg'
   },
   travelHistory: {
     type: DataTypes.JSONB,

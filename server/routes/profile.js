@@ -1,8 +1,18 @@
 const express = require('express');
+const multer = require('multer');
+const sharp = require('sharp');
+const path = require('path');
 const router = express.Router();
 const { User } = require('../models');
 const authenticate = require('../middleware/authenticate');
-const { Sequelize, Op } = require('sequelize')
+const { Sequelize, Op } = require('sequelize');
+
+// Configure multer for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+// Define the default profile picture path
+const defaultProfilePicture = '/uploads/default-profile-picture.png';
 
 // Fetch user profile
 router.get('/profile', authenticate, async (req, res) => {
@@ -61,11 +71,10 @@ router.get('/search', async (req, res) => {
   }
 });
 
-// Update user profile
+// Update user profile with profile picture
 router.put('/profile', authenticate, async (req, res) => {
   try {
-    const { username, bio, travelHistory } = req.body;
-    console.log('Request Body:', req.body);
+    const { username, bio, travelHistory, profilePicture } = req.body;
     const user = await User.findOne({ where: { id: req.userId } });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -73,11 +82,55 @@ router.put('/profile', authenticate, async (req, res) => {
     user.username = username !== undefined ? username : user.username;
     user.bio = bio !== undefined ? bio : user.bio;
     user.travelHistory = travelHistory !== undefined ? travelHistory : user.travelHistory;
+    user.profilePicture = profilePicture !== undefined ? profilePicture : user.profilePicture;
     await user.save();
-    console.log('Updated User:', user);
     res.json(user);
   } catch (error) {
     console.error('Error updating profile:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Upload profile picture and resize it
+router.post('/uploadProfilePicture', authenticate, upload.single('profilePicture'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const fileName = `${Date.now()}-${req.file.originalname}`;
+    const filePath = path.join(__dirname, '..', 'uploads', fileName);
+
+    // Resize the image to 625x625 using sharp
+    await sharp(req.file.buffer)
+      .resize(625, 625)
+      .toFile(filePath);
+
+    const user = await User.findOne({ where: { id: req.userId } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    user.profilePicture = `/uploads/${fileName}`;
+    await user.save();
+    res.json({ profilePicture: user.profilePicture });
+  } catch (error) {
+    console.error('Error uploading profile picture:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Remove profile picture and set to default
+router.post('/removeProfilePicture', authenticate, async (req, res) => {
+  try {
+    const user = await User.findOne({ where: { id: req.userId } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    user.profilePicture = defaultProfilePicture;
+    await user.save();
+    res.json({ profilePicture: user.profilePicture });
+  } catch (error) {
+    console.error('Error removing profile picture:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });
