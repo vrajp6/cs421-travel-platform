@@ -14,11 +14,6 @@ const Post = sequelize.define('Post', {
   imageUrl: {
     type: DataTypes.STRING,
     allowNull: true
-  },
-  likes: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-    allowNull: false
   }
 }, {
   timestamps: true
@@ -26,5 +21,9 @@ const Post = sequelize.define('Post', {
 
 Post.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(Post, { foreignKey: 'userId' });
+
+// Define a many-to-many relationship for likes
+Post.belongsToMany(User, { through: 'PostLikes', as: 'likedBy', foreignKey: 'postId' });
+User.belongsToMany(Post, { through: 'PostLikes', as: 'likedPosts', foreignKey: 'userId' });
 
 module.exports = Post;

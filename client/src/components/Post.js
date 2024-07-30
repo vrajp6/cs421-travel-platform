@@ -4,7 +4,7 @@ import { ThumbsUp, MessageCircle, MoreVertical, Trash2 } from 'lucide-react';
 import './PostStyles.css';
 
 const Post = ({ post, onDelete, currentUserId, isProfilePage }) => {
-  const [likes, setLikes] = useState(post.likes);
+  const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
@@ -34,21 +34,15 @@ const Post = ({ post, onDelete, currentUserId, isProfilePage }) => {
   const fetchLikeStatus = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      const storedLikeStatus = localStorage.getItem(`post_${post.id}_liked`);
-      if (storedLikeStatus !== null) {
-        setIsLiked(JSON.parse(storedLikeStatus));
-      } else {
-        const response = await axios.get(`http://localhost:5000/api/posts/${post.id}/like-status`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setIsLiked(response.data.isLiked);
-        localStorage.setItem(`post_${post.id}_liked`, JSON.stringify(response.data.isLiked));
-      }
-      setLikes(post.likes);
+      const response = await axios.get(`http://localhost:5000/api/posts/${post.id}/like-status`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setIsLiked(response.data.isLiked);
+      setLikes(response.data.likes);
     } catch (error) {
       console.error('Error fetching like status:', error);
     }
-  }, [post.id, post.likes]);
+  }, [post.id]);
 
   useEffect(() => {
     fetchCommentCount();
@@ -77,14 +71,11 @@ const Post = ({ post, onDelete, currentUserId, isProfilePage }) => {
   const handleLikeToggle = async () => {
     try {
       const token = localStorage.getItem('token');
-      const endpoint = isLiked ? 'unlike' : 'like';
-      const response = await axios.post(`http://localhost:5000/api/posts/${post.id}/${endpoint}`, {}, {
+      const response = await axios.post(`http://localhost:5000/api/posts/${post.id}/toggle-like`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLikes(response.data.likes);
-      const newLikeStatus = !isLiked;
-      setIsLiked(newLikeStatus);
-      localStorage.setItem(`post_${post.id}_liked`, JSON.stringify(newLikeStatus));
+      setIsLiked(response.data.isLiked);
     } catch (error) {
       console.error('Error toggling like:', error);
     }

@@ -126,36 +126,46 @@ router.get('/user/:userId', async (req, res) => {
   }
 });
 
-// Like a post
-router.post('/:id/like', authenticate, async (req, res) => {
+// Toggle like on a post
+router.post('/:id/toggle-like', authenticate, async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    post.likes += 1;
-    await post.save();
-    res.json({ likes: post.likes });
+    
+    const user = await User.findByPk(req.userId);
+    const hasLiked = await post.hasLikedBy(user);
+    
+    if (hasLiked) {
+      await post.removeLikedBy(user);
+    } else {
+      await post.addLikedBy(user);
+    }
+    
+    const likeCount = await post.countLikedBy();
+    res.json({ likes: likeCount, isLiked: !hasLiked });
   } catch (error) {
-    console.error('Error liking post:', error);
+    console.error('Error toggling like:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-// Unlike a post
-router.post('/:id/unlike', authenticate, async (req, res) => {
+// Get like status for a post
+router.get('/:id/like-status', authenticate, async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id);
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    if (post.likes > 0) {
-      post.likes -= 1;
-      await post.save();
-    }
-    res.json({ likes: post.likes });
+    
+    const user = await User.findByPk(req.userId);
+    const isLiked = await post.hasLikedBy(user);
+    const likeCount = await post.countLikedBy();
+    
+    res.json({ isLiked, likes: likeCount });
   } catch (error) {
-    console.error('Error unliking post:', error);
+    console.error('Error fetching like status:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });
