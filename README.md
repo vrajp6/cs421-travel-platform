@@ -19,33 +19,33 @@ Before you begin, ensure you have met the following requirements:
 
 **Installation**
 
-1. Clone the Repository:
+1. Clone the Repository:<br>
 
-git clone https://github.com/your-username/cs421-travel-platform.git
-cd cs421-travel-platform
+git clone https://github.com/your-username/cs421-travel-platform.git<br>
+cd cs421-travel-platform<br>
 
-2. Install Backend Dependencies
-Navigate to the backend directory and install the required dependencies:
+2. Install Backend Dependencies<br>
+Navigate to the backend directory and install the required dependencies:<br>
 
-cd backend
-npm install
+cd backend<br>
+npm install<br>
 
-3. Install Frontend Dependencies
-Navigate to the frontend directory and install the required dependencies:
+3. Install Frontend Dependencies<br>
+Navigate to the frontend directory and install the required dependencies:<br>
 
-cd frontend
-npm install
+cd frontend<br>
+npm install<br>
 
 4. Set Up Environment Variables
 
-Create a .env file in the backend directory with the following content:
+Create a .env file in the backend directory with the following content:<br>
 
-JWT_SECRET=mySuperSecretKey
-DATABASE_URL=postgres://postgres:vraj2003@localhost:5000/travel_platform_dev
+JWT_SECRET=mySuperSecretKey<br>
+DATABASE_URL=postgres://postgres:vraj2003@localhost:5000/travel_platform_dev<br>
 
-5. Fix files in the config folder of the backend to include the correct database password, which is the one you set during PostgreSQL installation
+5. Fix files in the config folder of the backend to include the correct database password, which is the one you set during PostgreSQL installation<br>
 
-config.json:
+config.json:<br>
 {
     "development": {
       "username": "postgres",
@@ -56,7 +56,7 @@ config.json:
     }
   }
 
-database.js:
+database.js:<br>
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize('travel_platform_dev', 'postgres', '<your_password>', {
@@ -69,17 +69,17 @@ module.exports = sequelize;
 
 6. Run Database Migrations
 
-Create a new database in PGAdmin called travel_platform_dev, ensure your PostgreSQL database is running, and then run the migrations to set up the database schema:
+Create a new database in PGAdmin called travel_platform_dev, ensure your PostgreSQL database is running, and then run the migrations to set up the database schema:<br>
 
-cd backend
-npx sequelize-cli db:migrate
+cd backend<br>
+npx sequelize-cli db:migrate<br>
 
 7. Running the Application
 
 Start the Backend Server
 
-cd backend
-node server.js
+cd backend<br>
+node server.js<br>
 
 Start the Frontend Server
 
