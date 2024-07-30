@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 const postRoutes = require('./routes/posts');
 const path = require('path');
+const followRoutes = require('./routes/follow');
 
 const app = express();
 
@@ -44,6 +45,7 @@ db.sequelize.sync({ alter: true }) // Use { alter: true } to avoid dropping data
 app.use('/api/auth', authRoutes);
 app.use('/api/user', profileRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api', followRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, Travel Enthusiasts Platform API!');
