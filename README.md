@@ -27,13 +27,13 @@ cd cs421-travel-platform<br>
 2. Install Backend Dependencies<br>
 Navigate to the backend directory and install the required dependencies:<br>
 
-cd backend<br>
+cd server<br>
 npm install<br>
 
 3. Install Frontend Dependencies<br>
 Navigate to the frontend directory and install the required dependencies:<br>
 
-cd frontend<br>
+cd client<br>
 npm install<br>
 
 4. Set Up Environment Variables
@@ -71,21 +71,21 @@ module.exports = sequelize;
 
 Create a new database in PGAdmin called travel_platform_dev, ensure your PostgreSQL database is running, and then run the migrations to set up the database schema:<br>
 
-cd backend<br>
+cd server<br>
 npx sequelize-cli db:migrate<br>
 
 7. Running the Application
 
 Start the Backend Server
 
-cd backend<br>
+cd server<br>
 node server.js<br>
 
 Start the Frontend Server
 
 Open a new terminal window and navigate to the frontend directory:
 
-cd frontend
+cd client
 npm start
 
 The frontend development server will start, and you can access the application at http://localhost:3000.
