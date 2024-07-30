@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
+const fs = require('fs');
 const router = express.Router();
 const { User } = require('../models');
 const authenticate = require('../middleware/authenticate');
@@ -13,6 +14,12 @@ const upload = multer({ storage });
 
 // Define the default profile picture path
 const defaultProfilePicture = '/uploads/default-profile-picture.png';
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadsDir)){
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 // Fetch user profile
 router.get('/profile', authenticate, async (req, res) => {
@@ -110,9 +117,10 @@ router.post('/uploadProfilePicture', authenticate, upload.single('profilePicture
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    user.profilePicture = `/uploads/${fileName}`;
+    const profilePicturePath = `/uploads/${fileName}`;
+    user.profilePicture = profilePicturePath;
     await user.save();
-    res.json({ profilePicture: user.profilePicture });
+    res.json({ profilePicture: `http://localhost:5000${profilePicturePath}` });
   } catch (error) {
     console.error('Error uploading profile picture:', error);
     res.status(500).json({ error: 'Server error' });

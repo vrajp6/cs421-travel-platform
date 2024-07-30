@@ -38,7 +38,16 @@ router.get('/', async (req, res) => {
       }],
       order: [['createdAt', 'DESC']]
     });
-    res.json(posts);
+    const postsWithFullUrls = posts.map(post => {
+      const jsonPost = post.toJSON();
+      if (jsonPost.User && jsonPost.User.profilePicture) {
+        jsonPost.User.profilePicture = jsonPost.User.profilePicture.startsWith('http') 
+          ? jsonPost.User.profilePicture 
+          : `http://localhost:5000${jsonPost.User.profilePicture}`;
+      }
+      return jsonPost;
+    });
+    res.json(postsWithFullUrls);
   } catch (error) {
     console.error('Error fetching posts:', error);
     res.status(500).json({ error: 'Server error' });

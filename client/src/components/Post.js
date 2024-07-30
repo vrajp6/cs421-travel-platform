@@ -122,7 +122,7 @@ const Post = ({ post, onDelete, currentUserId, isProfilePage }) => {
       <div className="post-header">
         <div className="user-info">
           <img 
-            src={post.User?.profilePicture || '/images/default-avatar.png'} 
+            src={post.User?.profilePicture || 'http://localhost:5000/uploads/default-profile-picture.png'} 
             alt="User avatar" 
             className="avatar" 
           />

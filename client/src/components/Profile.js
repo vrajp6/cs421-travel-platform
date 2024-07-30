@@ -182,7 +182,7 @@ const Profile = () => {
       <div className="profile-card">
         <div className="profile-header">
           <div className="profile-picture-container">
-            <img src={`http://localhost:5000${user.profilePicture}`} alt="Profile" className="profile-picture" />
+            <img src={user.profilePicture} alt="Profile" className="profile-picture" />
             <button onClick={() => document.getElementById('file-input').click()} className="change-picture-button">
               <i className="fas fa-camera"></i> Change Picture
             </button>
