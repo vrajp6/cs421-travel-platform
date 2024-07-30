@@ -1,249 +1,260 @@
-/* Overall PostFeed styles */
+:root {
+  --primary-color: #1877f2;
+  --secondary-color: #42b72a;
+  --background-color: #f0f2f5;
+  --text-color: #1c1e21;
+  --light-text-color: #65676b;
+  --border-color: #dddfe2;
+  --card-background: #ffffff;
+  --hover-background: #f2f2f2;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.post-feed {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.create-post, .post {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.create-post {
+  padding: 16px;
+}
+
+.create-post h2 {
+  font-size: 18px;
+  color: var(--text-color);
+  margin-bottom: 12px;
+}
+
+.create-post form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-post textarea,
+.create-post input[type="text"] {
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 12px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  resize: none;
+}
+
+.create-post textarea {
+  height: 100px;
+}
+
+.create-post button {
+  align-self: flex-end;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-post button:hover {
+  background-color: #166fe5;
+}
+
+.post {
+  padding: 16px;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+  object-fit: cover;
+}
+
+.post-info h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.location {
+  font-size: 12px;
+  color: var(--light-text-color);
+}
+
+.post-content {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.post-image {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--light-text-color);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.action-button:hover {
+  background-color: var(--hover-background);
+}
+
+.action-button svg {
+  margin-right: 4px;
+}
+
+.action-button.liked {
+  color: var(--primary-color);
+}
+
+.post-date {
+  font-size: 12px;
+  color: var(--light-text-color);
+  margin-top: 8px;
+}
+
+.comments-section {
+  margin-top: 16px;
+}
+
+.add-comment {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.add-comment input {
+  flex-grow: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.add-comment button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  margin-left: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-comment button:hover {
+  background-color: #166fe5;
+}
+
+.comments-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.comment {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.comment-content {
+  background-color: var(--hover-background);
+  border-radius: 18px;
+  padding: 8px 12px;
+  flex-grow: 1;
+}
+
+.comment-username {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.comment-text {
+  font-size: 13px;
+}
+
+.comment-date {
+  font-size: 11px;
+  color: var(--light-text-color);
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
   .post-feed {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  /* CreatePost styles */
-  .create-post {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .create-post h2 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 18px;
-    color: #333;
-  }
-  
-  .create-post form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .create-post textarea,
-  .create-post input[type="text"] {
-    margin-bottom: 10px;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
   }
-  
-  .create-post textarea {
-    height: 100px;
-    resize: vertical;
-  }
-  
-  .create-post button {
-    padding: 10px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .create-post button:hover {
-    background-color: #2980b9;
-  }
-  
-  /* Individual Post styles */
+
+  .create-post,
   .post {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 12px;
   }
-  
-  .post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .user-info {
-    display: flex;
-    align-items: center;
-  }
-  
+
   .avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-    object-fit: cover;
+    width: 36px;
+    height: 36px;
   }
-  
+
   .post-info h3 {
-    margin: 0;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  .location {
-    margin: 5px 0 0;
     font-size: 14px;
-    color: #777;
   }
-  
-  .post-content {
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  .post-image {
-    max-width: 100%;
-    border-radius: 8px;
-    margin-bottom: 15px;
-  }
-  
+
+  .location,
+  .post-content,
   .post-date {
-    font-size: 14px;
-    color: #777;
-    margin: 0;
-  }
-  
-  .delete-button {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .delete-button:hover {
-    background-color: #ff3333;
-  }
-
-  .like-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background-color: #f0f0f0;
-    border: none;
-    padding: 8px 12px;
-    margin-bottom: 10px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s ease;
-  }
-
-  .like-button:hover {
-    background-color: #e0e0e0;
-  }
-
-  .like-button.liked {
-    background-color: #1877f2;
-    color: white;
-  }
-
-  .like-button svg {
-    transition: transform 0.3s ease;
-  }
-
-  .like-button:hover svg {
-    transform: scale(1.1);
-  }
-  
-  .like-count {
     font-size: 12px;
-    color: #65676B;
   }
-  
-  .like-button.liked .like-count {
-    color: white;
-  }
-
-  .comments-section {
-    margin-top: 20px;
-  }
-  
-  .add-comment {
-    display: flex;
-    margin-bottom: 10px;
-  }
-  
-  .add-comment input {
-    flex-grow: 1;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-right: 10px;
-  }
-  
-  .add-comment button {
-    padding: 8px 15px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .comments-list {
-    max-height: 300px;
-    overflow-y: auto;
-  }
-  
-  .comment {
-    display: flex;
-    align-items: start;
-    margin-bottom: 10px;
-  }
-  
-  .comment-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .comment-content {
-    flex-grow: 1;
-  }
-  
-  .comment-username {
-    font-weight: bold;
-    margin-bottom: 3px;
-  }
-
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .post-feed {
-      padding: 10px;
-    }
-  
-    .create-post,
-    .post {
-      padding: 15px;
-    }
-  
-    .avatar {
-      width: 40px;
-      height: 40px;
-    }
-  
-    .post-info h3 {
-      font-size: 14px;
-    }
-  
-    .location,
-    .post-content,
-    .post-date {
-      font-size: 12px;
-    }
-  }
+}

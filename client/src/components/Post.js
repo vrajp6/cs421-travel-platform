@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { ThumbsUp, MessageCircle } from 'lucide-react';
+import { ThumbsUp, MessageCircle, MoreVertical, Trash2 } from 'lucide-react';
 import './PostStyles.css';
 
 const Post = ({ post, onDelete, currentUserId }) => {
@@ -10,6 +10,7 @@ const Post = ({ post, onDelete, currentUserId }) => {
   const [commentCount, setCommentCount] = useState(0);
   const [newComment, setNewComment] = useState('');
   const [showComments, setShowComments] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
 
   const fetchComments = useCallback(async () => {
     try {
@@ -66,7 +67,8 @@ const Post = ({ post, onDelete, currentUserId }) => {
     }
   };
 
-  const handleAddComment = async () => {
+  const handleAddComment = async (e) => {
+    e.preventDefault();
     if (!newComment.trim()) return;
 
     try {
@@ -88,6 +90,10 @@ const Post = ({ post, onDelete, currentUserId }) => {
     setShowComments(!showComments);
   };
 
+  const toggleOptions = () => {
+    setShowOptions(!showOptions);
+  };
+
   return (
     <div className="post">
       <div className="post-header">
@@ -103,7 +109,18 @@ const Post = ({ post, onDelete, currentUserId }) => {
           </div>
         </div>
         {post.userId === currentUserId && (
-          <button onClick={handleDelete} className="delete-button">Delete</button>
+          <div className="post-options">
+            <button onClick={toggleOptions} className="options-button">
+              <MoreVertical size={20} />
+            </button>
+            {showOptions && (
+              <div className="options-menu">
+                <button onClick={handleDelete} className="delete-button">
+                  <Trash2 size={16} /> Delete
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </div>
       <p className="post-content">{post.content}</p>
@@ -113,14 +130,14 @@ const Post = ({ post, onDelete, currentUserId }) => {
           onClick={handleLikeToggle} 
           className={`action-button ${isLiked ? 'liked' : ''}`}
         >
-          <ThumbsUp size={16} />
+          <ThumbsUp size={20} />
           <span>{likes} {likes === 1 ? 'Like' : 'Likes'}</span>
         </button>
         <button 
           onClick={toggleComments}
           className="action-button"
         >
-          <MessageCircle size={16} />
+          <MessageCircle size={20} />
           <span>{commentCount} {commentCount === 1 ? 'Comment' : 'Comments'}</span>
         </button>
       </div>
@@ -128,15 +145,15 @@ const Post = ({ post, onDelete, currentUserId }) => {
       
       {showComments && (
         <div className="comments-section">
-          <div className="add-comment">
+          <form onSubmit={handleAddComment} className="add-comment">
             <input
               type="text"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
+              placeholder="Write a comment..."
             />
-            <button onClick={handleAddComment}>Post</button>
-          </div>
+            <button type="submit">Post</button>
+          </form>
           <div className="comments-list">
             {comments.map((comment) => (
               <div key={comment.id} className="comment">
@@ -147,7 +164,7 @@ const Post = ({ post, onDelete, currentUserId }) => {
                 />
                 <div className="comment-content">
                   <p className="comment-username">{comment.User.username}</p>
-                  <p>{comment.content}</p>
+                  <p className="comment-text">{comment.content}</p>
                   <p className="comment-date">{new Date(comment.createdAt).toLocaleString()}</p>
                 </div>
               </div>
