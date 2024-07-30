@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Register from './components/Register';
 import Profile from './components/Profile';
-import Dashboard from './components/Dashboard';
 import NavBar from './components/NavBar';
 import PrivateRoute from './components/PrivateRoute';
 import './components/styles.css';
@@ -31,7 +30,6 @@ const App = () => {
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register onRegister={handleLogin} />} />
           <Route path="/profile" element={<PrivateRoute isLoggedIn={isLoggedIn}><Profile /></PrivateRoute>} />
-          <Route path="/dashboard" element={<PrivateRoute isLoggedIn={isLoggedIn}><Dashboard /></PrivateRoute>} />
           <Route path="/feed" element={<PrivateRoute isLoggedIn={isLoggedIn}><PostFeed /></PrivateRoute>} />  
           <Route path="/search" element={<PrivateRoute isLoggedIn={isLoggedIn}><Search /></PrivateRoute>} />
           <Route path="/profile/:username" element={<PrivateRoute isLoggedIn={isLoggedIn}><SearchProfile /></PrivateRoute>} />
