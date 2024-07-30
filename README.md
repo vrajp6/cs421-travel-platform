@@ -1,9 +1,9 @@
-TravelTopia
+# TravelTopia
 
-Description:
+## Description:
 TravelTopia is a travel platform that allows users to share their travel experiences, plan new trips, and connect with other travel enthusiasts. Users can create profiles, update their travel history and upcoming plans, and engage with posts from other users.
 
-Features
+### Features
 -User registration and authentication
 -Profile management with profile picture upload
 -Travel history and upcoming travel plans management
@@ -17,14 +17,14 @@ Before you begin, ensure you have met the following requirements:
 -PostgreSQL database installed and running
 -Git installed on your machine
 
-Installation
+**Installation**
 
 1. Clone the Repository:
 
 git clone https://github.com/your-username/cs421-travel-platform.git
 cd cs421-travel-platform
 
-3. Install Backend Dependencies
+2. Install Backend Dependencies
 Navigate to the backend directory and install the required dependencies:
 
 cd backend
