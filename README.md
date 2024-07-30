@@ -1,96 +1,91 @@
-# cs421-travel-platform
-
 TravelTopia
 
-TravelTopia is a travel planning platform that allows users to create, manage, and share their travel plans. This README provides information on how to set up the project, its features, and how to contribute.
+Description:
+TravelTopia is a travel platform that allows users to share their travel experiences, plan new trips, and connect with other travel enthusiasts. Users can create profiles, update their travel history and upcoming plans, and engage with posts from other users.
 
 Features
-User authentication (login, register)
-Create and manage travel plans
-User profile management
-Responsive and modern UI
-Getting Started
-Prerequisites
-Make sure you have the following installed:
+-User registration and authentication
+-Profile management with profile picture upload
+-Travel history and upcoming travel plans management
+-Post creation and feed for user posts
+-Search functionality to find other users by username or travel history
 
-Node.js
-npm
-PostgreSQL
+Getting Started:
+Before you begin, ensure you have met the following requirements:
+
+-Node.js and npm installed on your machine
+-PostgreSQL database installed and running
+-Git installed on your machine
 
 Installation
-Clone the repository:
 
+1. Clone the Repository:
 
-git clone https://github.com/your_github_username/cs421-travel-platform.git
+git clone https://github.com/your-username/cs421-travel-platform.git
 cd cs421-travel-platform
-Install server dependencies:
 
+3. Install Backend Dependencies
+Navigate to the backend directory and install the required dependencies:
 
-cd server
-npm install
-Install client dependencies:
-
-cd ../client
+cd backend
 npm install
 
+3. Install Frontend Dependencies
+Navigate to the frontend directory and install the required dependencies:
 
-Database Setup
+cd frontend
+npm install
 
-Set up PostgreSQL:
+4. Set Up Environment Variables
 
-Create a new PostgreSQL database.
-Set up environment variables:
+Create a .env file in the backend directory with the following content:
 
-Create a .env file in the server directory with the following content:
+JWT_SECRET=mySuperSecretKey
+DATABASE_URL=postgres://postgres:vraj2003@localhost:5000/travel_platform_dev
 
-PORT=5000
-DATABASE_URL=postgresql://username:password@localhost:5432/your-database-name
-JWT_SECRET=your-jwt-secret
-Run database migrations:
+5. Fix files in the config folder of the backend to include the correct database password, which is the one you set during PostgreSQL installation
 
-cd server
+config.json:
+{
+    "development": {
+      "username": "postgres",
+      "password": "<your_password>",
+      "database": "travel_platform_dev",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+    }
+  }
+
+database.js:
+const { Sequelize } = require('sequelize');
+
+const sequelize = new Sequelize('travel_platform_dev', 'postgres', '<your_password>', {
+  host: 'localhost',
+  dialect: 'postgres', // or 'mysql' or any other supported dialect
+  logging: false,
+});
+
+module.exports = sequelize;
+
+6. Run Database Migrations
+
+Create a new database in PGAdmin called travel_platform_dev, ensure your PostgreSQL database is running, and then run the migrations to set up the database schema:
+
+cd backend
 npx sequelize-cli db:migrate
-Starting the Application
-Start the development server:
 
-cd server
-npm run dev
-Start the client:
+7. Running the Application
 
-cd ../client
+Start the Backend Server
+
+cd backend
+node server.js
+
+Start the Frontend Server
+
+Open a new terminal window and navigate to the frontend directory:
+
+cd frontend
 npm start
 
-
-Usage
-
-Access the application:
-
-Navigate to http://localhost:3000 to access the application.
-
-User Authentication:
-
-Register: Create a new user account.
-Login: Use existing credentials to log in.
-User Profile:
-
-After logging in, navigate to your profile to create and manage your travel plans.
-
-Contributing
-We welcome contributions! Follow these steps to contribute:
-
-Fork the repository:
-
-Click the "Fork" button at the top right of the repository page.
-
-Create a new branch:
-
-git checkout -b feature/your-feature-name
-Make your changes and commit them:
-
-git commit -m 'Add some feature'
-Push to the branch:
-
-git push origin feature/your-feature-name
-Create a new Pull Request:
-
-Go to the repository on GitHub and click the "New Pull Request" button.
+The frontend development server will start, and you can access the application at http://localhost:3000.
