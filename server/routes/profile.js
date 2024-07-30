@@ -13,7 +13,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Define the default profile picture path
-const defaultProfilePicture = '/uploads/default-profile-picture.png';
+const DEFAULT_PROFILE_PICTURE = '/uploads/default-profile-picture.png';
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, '..', 'uploads');
@@ -27,6 +27,10 @@ router.get('/profile', authenticate, async (req, res) => {
     const user = await User.findOne({ where: { id: req.userId } });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
+    }
+    if (!user.profilePicture) {
+      user.profilePicture = DEFAULT_PROFILE_PICTURE;
+      await user.save(); // Update the user profile picture in the database
     }
     res.json(user);
   } catch (error) {
