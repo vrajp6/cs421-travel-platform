@@ -28,11 +28,12 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${token}` },
         };
         const response = await axios.get('http://localhost:5000/api/user/profile', config);
+        const profilePic = response.data.profilePicture || '/uploads/default-profile-picture.png';
         setUser({
           id: response.data.id,
           username: response.data.username,
           bio: response.data.bio || '',
-          profilePicture: response.data.profilePicture || '/uploads/default-profile-picture.png',
+          profilePicture: profilePic.startsWith('http') ? profilePic : `http://localhost:5000${profilePic}`,
           travelHistory: Array.isArray(response.data.travelHistory) ? response.data.travelHistory : [],
           travelPlans: Array.isArray(response.data.travelPlans) ? response.data.travelPlans : []
         });
@@ -182,7 +183,7 @@ const Profile = () => {
       <div className="profile-card">
         <div className="profile-header">
           <div className="profile-picture-container">
-            <img src={user.profilePicture} alt="Profile" className="profile-picture" />
+            <img src={user.profilePicture.startsWith('/uploads') ? `http://localhost:5000${user.profilePicture}` : user.profilePicture} alt="Profile" className="profile-picture" />
             <button onClick={() => document.getElementById('file-input').click()} className="change-picture-button">
               <i className="fas fa-camera"></i> Change Picture
             </button>

@@ -38,8 +38,8 @@
 
 .change-picture-button {
   position: absolute;
-  bottom: -10px;
-  left: 50%;
+  bottom: -15px;
+  left: 88%;
   transform: translateX(-50%);
   background-color: #1877f2;
   color: #ffffff;
@@ -221,6 +221,12 @@ textarea {
   border-radius: 4px;
   font-size: 14px;
 }
+
+textarea {
+  resize: none; 
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
 
 .input-field {
   width: 100%;
