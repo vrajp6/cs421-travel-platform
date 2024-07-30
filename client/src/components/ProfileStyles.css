@@ -160,6 +160,17 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.travel-plan:hover {
+  background-color: #f0f0f0;
+}
+
+.travel-plan-content {
+  flex-grow: 1;
+  padding-right: 30px;
 }
 
 .travel-date {
@@ -174,11 +185,22 @@ h2 {
 }
 
 .remove-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   background: none;
   border: none;
-  color: #e74c3c;
+  color: #999;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.remove-button:hover {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
 }
 
 .add-travel-plan {

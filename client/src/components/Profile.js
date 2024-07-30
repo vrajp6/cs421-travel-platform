@@ -250,14 +250,14 @@ const Profile = () => {
           <div className="travel-plans">
             {user.travelPlans.map((plan, index) => (
               <div key={index} className="travel-plan">
-                <div>
+                <div className="travel-plan-content">
                   <h3>{plan.destination}</h3>
                   <p className="travel-date">
                     <span className="icon">🗓️</span> {plan.date}
                   </p>
                   {plan.details && <p className="travel-details">{plan.details}</p>}
                 </div>
-                <button onClick={() => handleRemoveTravelPlan(index)} className="remove-button">
+                <button onClick={() => handleRemoveTravelPlan(index)} className="remove-button" aria-label="Remove travel plan">
                   ✖
                 </button>
               </div>
