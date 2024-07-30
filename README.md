@@ -4,18 +4,18 @@
 TravelTopia is a travel platform that allows users to share their travel experiences, plan new trips, and connect with other travel enthusiasts. Users can create profiles, update their travel history and upcoming plans, and engage with posts from other users.
 
 ### Features
--User registration and authentication
--Profile management with profile picture upload
--Travel history and upcoming travel plans management
--Post creation and feed for user posts
--Search functionality to find other users by username or travel history
+-User registration and authentication<br>
+-Profile management with profile picture upload<br>
+-Travel history and upcoming travel plans management<br>
+-Post creation and feed for user posts<br>
+-Search functionality to find other users by username or travel history<br>
 
-Getting Started:
+Getting Started:<br>
 Before you begin, ensure you have met the following requirements:
 
--Node.js and npm installed on your machine
--PostgreSQL database installed and running
--Git installed on your machine
+-Node.js and npm installed on your machine<br>
+-PostgreSQL database installed and running<br>
+-Git installed on your machine<br>
 
 **Installation**
 
@@ -46,14 +46,14 @@ DATABASE_URL=postgres://postgres:vraj2003@localhost:5000/travel_platform_dev<br>
 5. Fix files in the config folder of the backend to include the correct database password, which is the one you set during PostgreSQL installation<br>
 
 config.json:<br>
-{
-    "development": {
-      "username": "postgres",
-      "password": "<your_password>",
-      "database": "travel_platform_dev",
-      "host": "127.0.0.1",
-      "dialect": "postgres"
-    }
+{<br>
+    "development": {<br>
+      "username": "postgres",<br>
+      "password": "<your_password>",<br>
+      "database": "travel_platform_dev",<br>
+      "host": "127.0.0.1",<br>
+      "dialect": "postgres"<br>
+    }<br>
   }
 
 database.js:<br>
