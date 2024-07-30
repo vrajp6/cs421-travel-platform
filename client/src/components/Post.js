@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ThumbsUp, MessageCircle, MoreVertical, Trash2 } from 'lucide-react';
 import './PostStyles.css';
 
-const Post = ({ post, onDelete, currentUserId }) => {
+const Post = ({ post, onDelete, currentUserId, isProfilePage }) => {
   const [likes, setLikes] = useState(post.likes);
   const [isLiked, setIsLiked] = useState(false);
   const [comments, setComments] = useState([]);
@@ -118,7 +118,7 @@ const Post = ({ post, onDelete, currentUserId }) => {
   };
 
   return (
-    <div className="post">
+    <div className={`post ${isProfilePage ? 'profile-post' : ''}`}>
       <div className="post-header">
         <div className="user-info">
           <img 

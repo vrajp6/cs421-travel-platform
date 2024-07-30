@@ -25,31 +25,47 @@ const Register = () => {
 
   return (
     <div className="auth-container">
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h2>Create an Account</h2>
-        <label>Username:</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <label>Password:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <label>Confirm Password:</label>
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <button type="submit">Register</button>
-        <p>
-          Already have an account? <Link to="/login">Sign In</Link>
-        </p>
-      </form>
+      <div className="auth-form-wrapper">
+        <div className="auth-form-left">
+          <h2>Create an Account</h2>
+          <p className="auth-subtitle">Join TravelTopia and share your journey</p>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                className="modern-input"
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                className="modern-input"
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm Password"
+                className="modern-input"
+              />
+            </div>
+            <button type="submit" className="submit-btn">Create Account</button>
+          </form>
+        </div>
+        <div className="auth-form-right">
+          <h2>Welcome Back</h2>
+          <p>Already have an account?</p>
+          <Link to="/login" className="signup-btn">Sign In</Link>
+        </div>
+      </div>
     </div>
   );
 };

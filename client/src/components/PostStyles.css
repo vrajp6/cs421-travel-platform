@@ -1,42 +1,52 @@
 :root {
-  --primary-color: #1877f2;
-  --secondary-color: #42b72a;
-  --background-color: #f0f2f5;
-  --text-color: #1c1e21;
-  --light-text-color: #65676b;
-  --border-color: #dddfe2;
+  --primary-color: #4a90e2;
+  --secondary-color: #f3f4f6;
+  --text-color: #333;
+  --light-text-color: #666;
+  --border-color: #d1d5db;
   --card-background: #ffffff;
-  --hover-background: #f2f2f2;
+  --hover-background: #e8f0fe;
+  --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 body {
-  background-color: var(--background-color);
+  background-color: #f9fafb;
   color: var(--text-color);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .post-feed {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: var(--card-background);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px var(--shadow-color);
 }
 
 .create-post, .post {
   background-color: var(--card-background);
-  border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  margin-bottom: 30px;
   overflow: hidden;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.create-post:hover, .post:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 .create-post {
-  padding: 16px;
+  padding: 20px;
 }
 
 .create-post h2 {
-  font-size: 18px;
-  color: var(--text-color);
-  margin-bottom: 12px;
+  font-size: 20px;
+  color: var(--primary-color);
+  margin-bottom: 16px;
 }
 
 .create-post form {
@@ -47,15 +57,22 @@ body {
 .create-post textarea,
 .create-post input[type="text"] {
   border: 1px solid var(--border-color);
-  border-radius: 20px;
+  border-radius: 8px;
   padding: 12px;
-  font-size: 14px;
-  margin-bottom: 12px;
+  font-size: 16px;
+  margin-bottom: 16px;
   resize: none;
+  transition: all 0.3s ease;
+}
+
+.create-post textarea:focus,
+.create-post input[type="text"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
 }
 
 .create-post textarea {
-  height: 100px;
+  height: 120px;
 }
 
 .create-post button {
@@ -63,27 +80,27 @@ body {
   background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: bold;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .create-post button:hover {
-  background-color: #166fe5;
+  background-color: #3a7bc8;
 }
 
 .post {
-  padding: 16px;
+  padding: 20px;
 }
 
 .post-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .user-info {
@@ -92,41 +109,43 @@ body {
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  margin-right: 12px;
+  margin-right: 16px;
   object-fit: cover;
+  border: 2px solid var(--primary-color);
 }
 
 .post-info h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
+  color: var(--primary-color);
 }
 
 .location {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--light-text-color);
 }
 
 .post-content {
-  font-size: 14px;
-  line-height: 1.5;
-  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
 
 .post-image {
   width: 100%;
-  border-radius: 8px;
-  margin-bottom: 12px;
+  border-radius: 12px;
+  margin-bottom: 16px;
 }
 
 .post-actions {
   display: flex;
   justify-content: space-between;
   border-top: 1px solid var(--border-color);
-  padding-top: 12px;
+  padding-top: 16px;
 }
 
 .action-button {
@@ -135,19 +154,20 @@ body {
   background: none;
   border: none;
   color: var(--light-text-color);
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .action-button:hover {
   background-color: var(--hover-background);
+  color: var(--primary-color);
 }
 
 .action-button svg {
-  margin-right: 4px;
+  margin-right: 8px;
 }
 
 .action-button.liked {
@@ -155,106 +175,119 @@ body {
 }
 
 .post-date {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--light-text-color);
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .comments-section {
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 .add-comment {
   display: flex;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .add-comment input {
   flex-grow: 1;
   border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 8px 12px;
-  font-size: 14px;
+  border-radius: 30px;
+  padding: 10px 16px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.add-comment input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
 }
 
 .add-comment button {
   background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 8px 16px;
-  margin-left: 8px;
-  font-size: 14px;
+  border-radius: 30px;
+  padding: 10px 20px;
+  margin-left: 12px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .add-comment button:hover {
-  background-color: #166fe5;
+  background-color: #3a7bc8;
 }
 
 .comments-list {
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
 }
 
 .comment {
   display: flex;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .comment-avatar {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  margin-right: 8px;
+  margin-right: 12px;
+  border: 2px solid var(--primary-color);
 }
 
 .comment-content {
-  background-color: var(--hover-background);
-  border-radius: 18px;
-  padding: 8px 12px;
+  background-color: var(--secondary-color);
+  border-radius: 12px;
+  padding: 12px 16px;
   flex-grow: 1;
 }
 
 .comment-username {
   font-weight: 600;
-  font-size: 13px;
-  margin-bottom: 2px;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--primary-color);
 }
 
 .comment-text {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .comment-date {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--light-text-color);
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 @media (max-width: 768px) {
   .post-feed {
-    padding: 10px;
+    padding: 20px;
   }
 
   .create-post,
   .post {
-    padding: 12px;
+    padding: 16px;
   }
 
   .avatar {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
   }
 
   .post-info h3 {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .location,
   .post-content,
   .post-date {
-    font-size: 12px;
+    font-size: 14px;
+  }
+
+  .action-button {
+    font-size: 14px;
   }
 }

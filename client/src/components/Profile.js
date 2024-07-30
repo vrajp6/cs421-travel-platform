@@ -181,15 +181,27 @@ const Profile = () => {
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-header">
-          <img src={`http://localhost:5000${user.profilePicture}`} alt="Profile" className="profile-picture" />
+          <div className="profile-picture-container">
+            <img src={`http://localhost:5000${user.profilePicture}`} alt="Profile" className="profile-picture" />
+            <button onClick={() => document.getElementById('file-input').click()} className="change-picture-button">
+              <i className="fas fa-camera"></i> Change Picture
+            </button>
+            <input type="file" onChange={handleFileChange} style={{ display: 'none' }} id="file-input" />
+          </div>
           <div className="profile-info">
             <h1>{user.username}</h1>
-            <p>{user.bio}</p>
+            <p className="bio">{user.bio}</p>
           </div>
         </div>
-        <div className="profile-actions">
-          <button onClick={() => document.getElementById('file-input').click()} className="profile-action-button">Change Profile Picture</button>
-          <input type="file" onChange={handleFileChange} style={{ display: 'none' }} id="file-input" />
+        <div className="profile-stats">
+          <div className="stat">
+            <span className="stat-value">{user.travelHistory.length}</span>
+            <span className="stat-label">Places Visited</span>
+          </div>
+          <div className="stat">
+            <span className="stat-value">{user.travelPlans.length}</span>
+            <span className="stat-label">Upcoming Trips</span>
+          </div>
         </div>
         <div className="profile-content">
           <h2>

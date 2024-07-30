@@ -25,27 +25,27 @@ const Login = ({ onLogin }) => {
     <div className="auth-container">
       <div className="auth-form-wrapper">
         <div className="auth-form-left">
-          <h2>Sign In</h2>
+          <h2>Welcome Back</h2>
+          <p className="auth-subtitle">Please enter your details to sign in</p>
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label>USERNAME</label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Username"
+                className="modern-input"
               />
             </div>
             <div className="form-group">
-              <label>PASSWORD</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
+                className="modern-input"
               />
             </div>
-            <button type="submit" className="submit-btn">Sign In</button>
             <div className="form-options">
               <label className="remember-me">
                 <input
@@ -53,16 +53,17 @@ const Login = ({ onLogin }) => {
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                 />
-                Remember Me
+                <span>Remember Me</span>
               </label>
-              <Link to="/forgot-password" className="forgot-password">Forgot Password</Link>
+              <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
             </div>
+            <button type="submit" className="submit-btn">Sign In</button>
           </form>
         </div>
         <div className="auth-form-right">
-          <h2>Welcome to TravelTopia</h2>
-          <p>Don't have an account?</p>
-          <Link to="/register" className="signup-btn">Sign Up</Link>
+          <h2>New to TravelTopia?</h2>
+          <p>Join us and share your journey today!</p>
+          <Link to="/register" className="signup-btn">Create Account</Link>
         </div>
       </div>
     </div>
