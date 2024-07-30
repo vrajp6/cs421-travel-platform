@@ -31,9 +31,29 @@ const Post = ({ post, onDelete, currentUserId }) => {
     }
   }, [post.id]);
 
+  const fetchLikeStatus = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const storedLikeStatus = localStorage.getItem(`post_${post.id}_liked`);
+      if (storedLikeStatus !== null) {
+        setIsLiked(JSON.parse(storedLikeStatus));
+      } else {
+        const response = await axios.get(`http://localhost:5000/api/posts/${post.id}/like-status`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setIsLiked(response.data.isLiked);
+        localStorage.setItem(`post_${post.id}_liked`, JSON.stringify(response.data.isLiked));
+      }
+      setLikes(post.likes);
+    } catch (error) {
+      console.error('Error fetching like status:', error);
+    }
+  }, [post.id, post.likes]);
+
   useEffect(() => {
     fetchCommentCount();
-  }, [fetchCommentCount]);
+    fetchLikeStatus();
+  }, [fetchCommentCount, fetchLikeStatus]);
 
   useEffect(() => {
     if (showComments) {
@@ -47,6 +67,7 @@ const Post = ({ post, onDelete, currentUserId }) => {
       await axios.delete(`http://localhost:5000/api/posts/${post.id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      localStorage.removeItem(`post_${post.id}_liked`);
       onDelete(post.id);
     } catch (error) {
       console.error('Error deleting post:', error);
@@ -61,7 +82,9 @@ const Post = ({ post, onDelete, currentUserId }) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLikes(response.data.likes);
-      setIsLiked(!isLiked);
+      const newLikeStatus = !isLiked;
+      setIsLiked(newLikeStatus);
+      localStorage.setItem(`post_${post.id}_liked`, JSON.stringify(newLikeStatus));
     } catch (error) {
       console.error('Error toggling like:', error);
     }
