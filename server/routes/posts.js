@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Post, User } = require('../models');
+const { Post, User, Comment } = require('../models');
 const authenticate = require('../middleware/authenticate');
 
 // Create a new post
@@ -14,7 +14,6 @@ router.post('/', authenticate, async (req, res) => {
       imageUrl
     });
     
-    // Fetch the created post with user data
     const postWithUser = await Post.findByPk(post.id, {
       include: [{ 
         model: User, 
@@ -36,7 +35,6 @@ router.get('/', async (req, res) => {
       include: [{ 
         model: User, 
         attributes: ['id', 'username', 'profilePicture'],
-        required: false
       }],
       order: [['createdAt', 'DESC']]
     });
@@ -149,6 +147,54 @@ router.post('/:id/unlike', authenticate, async (req, res) => {
     res.json({ likes: post.likes });
   } catch (error) {
     console.error('Error unliking post:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Get comments for a post
+router.get('/:id/comments', async (req, res) => {
+  try {
+    const comments = await Comment.findAll({
+      where: { postId: req.params.id },
+      include: [{ model: User, attributes: ['id', 'username', 'profilePicture'] }],
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(comments);
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Add a comment to a post
+router.post('/:id/comments', authenticate, async (req, res) => {
+  try {
+    const { content } = req.body;
+    const comment = await Comment.create({
+      content,
+      userId: req.userId,
+      postId: req.params.id
+    });
+    const commentWithUser = await Comment.findByPk(comment.id, {
+      include: [{ model: User, attributes: ['id', 'username', 'profilePicture'] }]
+    });
+    res.status(201).json(commentWithUser);
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+// Get comment count for a post
+router.get('/:id/comments/count', async (req, res) => {
+  try {
+    const count = await Comment.count({
+      where: { postId: req.params.id }
+    });
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching comment count:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });
