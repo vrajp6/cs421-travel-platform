@@ -41,7 +41,7 @@ npm install<br>
 Create a .env file in the backend directory with the following content:<br>
 
 JWT_SECRET=mySuperSecretKey<br>
-DATABASE_URL=postgres://postgres:vraj2003@localhost:5000/travel_platform_dev<br>
+DATABASE_URL=postgres://postgres:<your_postgres_passsword>@localhost:5000/travel_platform_dev<br>
 
 5. Fix files in the config folder of the backend to include the correct database password, which is the one you set during PostgreSQL installation<br>
 
