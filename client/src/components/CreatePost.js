@@ -6,15 +6,19 @@ const CreatePost = ({ onPostCreated }) => {
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('');
   const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setImageFile(e.target.files[0]);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
 
-
-  
   const uploadImage = async () => {
     const formData = new FormData();
     formData.append('imageFile', imageFile);
@@ -31,7 +35,6 @@ const CreatePost = ({ onPostCreated }) => {
           },
         }
       );
-      console.log('Image upload response:', response.data);
       return response.data.imageFile; // Updated to use `imageFile`
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -67,6 +70,7 @@ const CreatePost = ({ onPostCreated }) => {
       setContent('');
       setLocation('');
       setImageFile(null);
+      setImagePreview(null);
     } catch (error) {
       console.error('Error creating post:', error);
     }
@@ -93,6 +97,13 @@ const CreatePost = ({ onPostCreated }) => {
           accept="image/*"
           onChange={handleFileChange}
         />
+        {imagePreview && (
+          <img
+            src={imagePreview}
+            alt="Preview"
+            className="image-preview"
+          />
+        )}
         <button type="submit">Post</button>
       </form>
     </div>

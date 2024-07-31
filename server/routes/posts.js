@@ -6,12 +6,18 @@ const authenticate = require('../middleware/authenticate');
 // Create a new post
 router.post('/', authenticate, async (req, res) => {
   try {
-    const { content, location, imageUrl } = req.body;
+    const { content, location } = req.body;
+    let imageFile = req.body.imageUrl;
+
+    if (!imageFile) {
+      imageFile = null;
+    }
+
     const post = await Post.create({
       userId: req.userId,
       content,
       location,
-      imageUrl
+      imageFile
     });
     
     const postWithUser = await Post.findByPk(post.id, {
@@ -80,8 +86,8 @@ router.put('/:id', authenticate, async (req, res) => {
     if (post.userId !== req.userId) {
       return res.status(403).json({ error: 'Not authorized' });
     }
-    const { content, location, imageUrl } = req.body;
-    await post.update({ content, location, imageUrl });
+    const { content, location, imageFile } = req.body;
+    await post.update({ content, location, imageFile });
     res.json(post);
   } catch (error) {
     console.error('Error updating post:', error);

@@ -291,3 +291,8 @@ body {
     font-size: 14px;
   }
 }
+.image-preview {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+}

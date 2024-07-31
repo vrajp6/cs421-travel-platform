@@ -141,7 +141,7 @@ const Post = ({ post, onDelete, currentUserId, isProfilePage }) => {
         )}
       </div>
       <p className="post-content">{post.content}</p>
-      {post.imageFile && <img src={post.imageFile} alt="Post" className="post-image" />}
+      {post.imageFile && <img src={post.imageFile} alt="Post" className="post-image" />} {/* Updated field */}
       <div className="post-actions">
         <button 
           onClick={handleLikeToggle} 
