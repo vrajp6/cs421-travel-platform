@@ -11,12 +11,15 @@ const Post = ({ post, onDelete, currentUserId, isProfilePage }) => {
   const [newComment, setNewComment] = useState('');
   const [showComments, setShowComments] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
+  const [profilePictures, setProfilePictures] = useState({});
 
   const fetchComments = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:5000/api/posts/${post.id}/comments`);
       setComments(response.data);
       setCommentCount(response.data.length);
+      const profilePicsResponse = await axios.post('http://localhost:5000/api/users/profile-pictures', { userIds: response.data.map(comment => comment.userId) });
+      setProfilePictures(profilePicsResponse.data);
     } catch (error) {
       console.error('Error fetching comments:', error);
     }
@@ -172,7 +175,7 @@ const Post = ({ post, onDelete, currentUserId, isProfilePage }) => {
             {comments.map((comment) => (
               <div key={comment.id} className="comment">
                 <img
-                  src={comment.User.profilePicture || '/images/default-avatar.png'}
+                  src={profilePictures[comment.userId] || 'http://localhost:5000/uploads/default-profile-picture.png'}
                   alt="User avatar"
                   className="comment-avatar"
                 />
