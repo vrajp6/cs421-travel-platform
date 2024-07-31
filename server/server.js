@@ -5,6 +5,7 @@ const config = require('./config/config.json')['development'];
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 const postRoutes = require('./routes/posts');
+const uploadRoutes = require('./routes/uploadImages'); // Import the uploadImages route
 const path = require('path');
 
 const app = express();
@@ -29,7 +30,9 @@ db.sequelize = sequelize;
 
 // Models
 const User = require('./models/user');
+const Post = require('./models/post'); // Make sure to import the Post model if not already done
 db.User = User;
+db.Post = Post;
 
 // Sync models with the database
 db.sequelize.sync({ alter: true }) // Use { alter: true } to avoid dropping data, and create/modify tables
@@ -44,6 +47,7 @@ db.sequelize.sync({ alter: true }) // Use { alter: true } to avoid dropping data
 app.use('/api/auth', authRoutes);
 app.use('/api/user', profileRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/images', uploadRoutes); // Add the upload route for handling image uploads
 
 app.get('/', (req, res) => {
   res.send('Hello, Travel Enthusiasts Platform API!');
