@@ -1,21 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './PostStyles.css';
+import { Upload, X } from 'lucide-react';
 
 const CreatePost = ({ onPostCreated }) => {
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [fileName, setFileName] = useState('');
+  const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+      const file = e.target.files[0];
+      setImageFile(file);
+      setFileName(file.name);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
       };
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFileButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleRemoveFile = () => {
+    setImageFile(null);
+    setFileName('');
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -92,19 +110,36 @@ const CreatePost = ({ onPostCreated }) => {
           onChange={(e) => setLocation(e.target.value)}
           placeholder="Location (optional)"
         />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        {imagePreview && (
-          <img
-            src={imagePreview}
-            alt="Preview"
-            className="image-preview"
+        <div className="file-input-container">
+          <button type="button" onClick={handleFileButtonClick} className="file-input-button">
+            <Upload size={18} /> Choose Image
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/*"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
           />
+          {fileName && (
+            <div className="file-name-container">
+              <span className="file-name">{fileName}</span>
+              <button type="button" onClick={handleRemoveFile} className="remove-file-button">
+                <X size={18} />
+              </button>
+            </div>
+          )}
+        </div>
+        {imagePreview && (
+          <div className="image-preview-container">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="image-preview"
+            />
+          </div>
         )}
-        <button type="submit">Post</button>
+        <button type="submit" className="submit-button">Post</button>
       </form>
     </div>
   );
