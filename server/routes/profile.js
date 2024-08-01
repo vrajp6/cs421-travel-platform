@@ -102,6 +102,25 @@ router.put('/profile', authenticate, async (req, res) => {
   }
 });
 
+// Fetch profile pictures for a list of user IDs
+router.post('/profile-pictures', async (req, res) => {
+  try {
+    const { userIds } = req.body;
+    const users = await User.findAll({
+      where: { id: userIds },
+      attributes: ['id', 'profilePicture']
+    });
+    const profilePictures = {};
+    users.forEach(user => {
+      profilePictures[user.id] = user.profilePicture || '/uploads/default-profile-picture.png';
+    });
+    res.json(profilePictures);
+  } catch (error) {
+    console.error('Error fetching profile pictures:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Upload profile picture and resize it
 router.post('/uploadProfilePicture', authenticate, upload.single('profilePicture'), async (req, res) => {
   try {
