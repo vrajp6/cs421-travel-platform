@@ -63,7 +63,7 @@ const Search = () => {
               {user.travelHistory && user.travelHistory.length > 0 && (
                 <div className="travel-history">
                   <MapPin size={18} />
-                  <span>{user.travelHistory[0]}</span>
+                  <span>{user.travelHistory.join(", ")}</span>
                 </div>
               )}
             </div>
