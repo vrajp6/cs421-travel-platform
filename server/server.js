@@ -7,6 +7,7 @@ const profileRoutes = require('./routes/profile');
 const postRoutes = require('./routes/posts');
 const uploadRoutes = require('./routes/uploadImages'); // Import the uploadImages route
 const path = require('path');
+const followRoutes = require('./routes/follow');
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', profileRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/images', uploadRoutes); // Add the upload route for handling image uploads
+app.use('/api', followRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, Travel Enthusiasts Platform API!');

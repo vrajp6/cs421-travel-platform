@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import UserPosts from './UserPosts';
+import FollowButton from './FollowButton'; //follow button file
 import './ProfileStyles.css';
 
 const SearchProfile = () => {
   const { username } = useParams();
   const [user, setUser] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,6 +36,7 @@ const SearchProfile = () => {
       }
     };
 
+
     fetchProfile();
     fetchCurrentUser();
   }, [username]);
@@ -53,6 +56,7 @@ const SearchProfile = () => {
           <img src={user.profilePicture || '/images/default-picture.jpg'} alt="Profile" className="profile-picture" />
           <div className="profile-info">
             <h1>{user.username}</h1>
+            <FollowButton userId={user.id} isFollowing={isFollowing} />
             <p>{user.bio}</p>
           </div>
         </div>
@@ -87,7 +91,6 @@ const SearchProfile = () => {
           </div>
         </div>
       </div>
-
       <UserPosts userId={user.id} currentUserId={currentUserId} />
     </div>
   );
