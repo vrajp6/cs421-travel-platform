@@ -53,7 +53,7 @@ const SearchProfile = () => {
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-header">
-          <img src={user.profilePicture || '/images/default-picture.jpg'} alt="Profile" className="profile-picture" />
+          <img src={user.profilePicture || 'http://localhost:5000/uploads/default-profile-picture.png'} alt="Profile" className="profile-picture" />
           <div className="profile-info">
             <h1>{user.username}</h1>
             <FollowButton userId={user.id} isFollowing={isFollowing} />
